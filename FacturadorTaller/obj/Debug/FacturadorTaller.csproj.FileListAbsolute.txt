@@ -144,3 +144,6 @@ C:\FacturadorTaller\FacturadorTaller\bin\Microsoft.Owin.Security.MicrosoftAccoun
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.csprojResolveAssemblyReference.cache
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.dll
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.pdb
+C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.csproj.CoreCompileInputs.cache
+C:\FacturadorTaller\FacturadorTaller\bin\itextsharp.dll
+C:\FacturadorTaller\FacturadorTaller\bin\itextsharp.xml

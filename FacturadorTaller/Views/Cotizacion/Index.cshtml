@@ -10,7 +10,7 @@
     <h2>Cotizacion</h2>
 
     <p>
-        @Html.ActionLink("Nuevo Registro", "Create")
+        @Html.ActionLink("Nuevo Registro", "CreateCot")
     </p>
 
     @using (Html.BeginForm("Index", "Cotizacion", FormMethod.Get))
@@ -53,8 +53,10 @@
                 </td>
                 <td>
                     @Html.ActionLink("Editar", "Edit", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Email", "Email", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Imprimir", "Pdf", new { id = item.CotizacionId }) |
                     @Html.ActionLink("Detalle", "Details", new { id = item.CotizacionId }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.CotizacionId })
+                    @Html.ActionLink("Eliminar", "CotDelete", new { id = item.CotizacionId })
                 </td>
             </tr>
         }
