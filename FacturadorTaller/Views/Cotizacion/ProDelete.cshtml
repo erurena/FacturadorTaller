@@ -1,0 +1,30 @@
+﻿@model FacturadorTaller.Models.DetalleCot
+
+@{
+    ViewBag.Title = "Eliminar Item Cotizacion";
+}
+
+<h2>Eliminar Item Cotizacion</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DetalleCotId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DetalleCotId)
+        </dd>
+
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.DetalleCotId)
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Volver a Lista", "Index")
+        </div>
+    }
+</div>
