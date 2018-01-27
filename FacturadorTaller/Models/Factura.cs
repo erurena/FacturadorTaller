@@ -19,6 +19,8 @@ namespace FacturadorTaller.Models
 
         public string Ncf { get; set; }
 
+        public string PagoStatus { get; set; }
+
         [Required]
         public string OrdenCompraNu { get; set; }
 

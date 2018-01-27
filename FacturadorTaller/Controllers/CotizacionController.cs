@@ -707,6 +707,54 @@ namespace FacturadorTaller.Controllers
             return View(mod);
         }
 
+        // GET: Factura/Edit/5
+        //[Authorize(Roles = "Admin, Usuario")]
+        public ActionResult CreaFactura (int id)
+        {
+            var VM = new CreafacturaViewModel();
+            VM.CotId = id;
+            return View(VM);
+        }
+
+        //[Authorize(Roles = "Admin, Usuario")]
+        [HttpPost, ActionName("CreaFactura")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreaFactura(CreafacturaViewModel mod)
+        {
+            if (mod == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var cotId = mod.CotId;
+                    var fechaFac = mod.GetDateF();
+                    var fechaVen = mod.GetDateFv();
+                    var ncf = mod.NcfInd;
+                    var ordenCompra = mod.Factura.OrdenCompraNu;
+
+                    Factura file = new Factura();
+
+                    file.CotizacionId = cotId;
+                    file.FechaFac = fechaFac;
+                    file.FechaVen = fechaVen;
+                    file.Ncf = ncf;
+                    file.OrdenCompraNu = ordenCompra;
+                    DB.Factura.Add(file);
+                    DB.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (RetryLimitExceededException  /* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            return View(mod);
+        }
+
 
         public JsonResult GetClientes()
         {

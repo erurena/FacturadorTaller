@@ -12,6 +12,7 @@ namespace FacturadorTaller.Models
         public virtual DbSet<Cotizacion> Cotizacion { get; set; }
         public virtual DbSet<DetalleCot> DetalleCot { get; set; }
         public virtual DbSet<Factura> Factura { get; set; }
+        public virtual DbSet<Pago> Pago { get; set; }
         public virtual DbSet<FlujoCaja> FlujoCaja { get; set; }
         public virtual DbSet<Ncf> Ncf { get; set; }
         public virtual DbSet<Producto> Producto { get; set; }
@@ -51,6 +52,10 @@ namespace FacturadorTaller.Models
 
             modelBuilder.Entity<DetalleCot>()
                 .Property(e => e.Valor)
+                .HasPrecision(18, 0);
+
+            modelBuilder.Entity<Pago>()
+                .Property(e => e.MontoPago)
                 .HasPrecision(18, 0);
 
             modelBuilder.Entity<Producto>()
