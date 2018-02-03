@@ -208,6 +208,8 @@
     <Compile Include="ViewModel\CotizacionViewModel.cs" />
     <Compile Include="ViewModel\CreafacturaViewModel.cs" />
     <Compile Include="ViewModel\DetalleCotViewModel.cs" />
+    <Compile Include="ViewModel\FacturaViewModel.cs" />
+    <Compile Include="ViewModel\PagoViewModel.cs" />
     <Compile Include="ViewModel\ValidDate.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +340,8 @@
     <Content Include="Views\Cotizacion\Sent.cshtml" />
     <Content Include="Views\Cotizacion\CreaFactura.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
+    <Content Include="Views\Factura\Edit.cshtml" />
+    <Content Include="Views\Factura\Pago.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

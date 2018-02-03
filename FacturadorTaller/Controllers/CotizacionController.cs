@@ -548,7 +548,7 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 table1.AddCell(detalle.Comentario);
-                table1.AddCell(detalle.Valor.ToString("C"));
+                table1.AddCell(detalle.Valor.ToString("N0"));
             }
 
             doc.Add(table1);
@@ -561,7 +561,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.Cotizacion.TotalFactura.ToString("C"));
+            table1.AddCell("Total RD: " + VM.Cotizacion.TotalFactura.ToString("C0"));
 
             doc.Add(table1);
 
@@ -573,7 +573,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.Cotizacion.Itbis.ToString("C"));
+            table1.AddCell("18% Itbis: " + VM.Cotizacion.Itbis.ToString("C0"));
 
             doc.Add(table1);
 
@@ -584,7 +584,7 @@ namespace FacturadorTaller.Controllers
 
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total General RD: " + totalFac.ToString("C"));
+            table1.AddCell("Total General RD: " + totalFac.ToString("C0"));
 
             doc.Add(table1);
 
