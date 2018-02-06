@@ -147,3 +147,7 @@ C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.pdb
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.csproj.CoreCompileInputs.cache
 C:\FacturadorTaller\FacturadorTaller\bin\itextsharp.dll
 C:\FacturadorTaller\FacturadorTaller\bin\itextsharp.xml
+C:\FacturadorTaller\FacturadorTaller\bin\AntiXssLibrary.dll
+C:\FacturadorTaller\FacturadorTaller\bin\HtmlSanitizationLibrary.dll
+C:\FacturadorTaller\FacturadorTaller\bin\AntiXssLibrary.xml
+C:\FacturadorTaller\FacturadorTaller\bin\HtmlSanitizationLibrary.xml

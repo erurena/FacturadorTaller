@@ -324,13 +324,13 @@ namespace FacturadorTaller.Controllers
         //[Authorize(Roles = "Admin, Usuario")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Email (CotizacionViewModel cot, string email)
+        public ActionResult Email (CotizacionViewModel cot)
         {
             if (cot == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            string femail = email.ToString();
+            string femail = cot.Email;
             var VM = new CotizacionViewModel();
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
                             .FirstOrDefault(c => c.CotizacionId == cot.Cotizacion.CotizacionId);

@@ -1,0 +1,72 @@
+﻿@model PagedList.IPagedList<FacturadorTaller.Models.Ncf>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+@{
+    ViewBag.Title = "Ncf";
+}
+
+<h2>Ncf</h2>
+
+<p>
+    @Html.ActionLink("Nuevo Registro", "CreateNcf")
+</p>
+
+@using (Html.BeginForm("IndexNcf", "Administracion", FormMethod.Get))
+{
+    <p>
+        Busqueda : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Inicio", "IndexNcf", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("NumInicio", "IndexNcf", new { sortOrder = ViewBag.ProductoSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            Numero Fin
+        </th>
+        <th>
+            Cantidad
+        </th>
+        <th>
+            Ultimo Asignado
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelitem => item.Inicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.NumInicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.NumFin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.Contador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.NumActual)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "EditNcf", new { id = item.NcfId }) |
+        </td>
+    </tr>
+    }
+
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

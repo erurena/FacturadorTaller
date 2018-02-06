@@ -18,7 +18,8 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.Categoria)
-        @Html.TextBoxFor(model => model.Categoria, new { @class = "form-control" })
+        @Html.RadioButtonFor(model => model.Categoria, "Servicio") Servicio
+        @Html.RadioButtonFor(model => model.Categoria, "Producto") Produto
         @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
     </div>
       <div class="form-group">

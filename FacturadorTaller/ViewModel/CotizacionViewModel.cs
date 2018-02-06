@@ -1,6 +1,7 @@
 ﻿using FacturadorTaller.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +11,9 @@ namespace FacturadorTaller.ViewModel
     {
         [ValidDate]
         public string Fecha { get; set; }
+
+        [EmailAddress(ErrorMessage ="Correo Invalido !!!")]
+        public string Email { get; set; }
        
         public Clientes Clientes { get; set; }
         public Cotizacion Cotizacion { get; set; }
