@@ -26,6 +26,8 @@ namespace FacturadorTaller.Models
 
         public decimal Itbis { get; set; }
 
+        public string FacturaEst { get; set; }
+
         public virtual Clientes Clientes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

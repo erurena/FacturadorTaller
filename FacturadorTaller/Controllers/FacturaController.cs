@@ -47,6 +47,11 @@ namespace FacturadorTaller.Controllers
             var factura = from s in DB.Factura.Include(f => f.Cotizacion.Clientes)
                           .Where(f => f.PagoStatus !="S")
                              select s;
+            var ncf = DB.Ncf.Where(n => n.Estatus == null).SingleOrDefault();
+            if (ncf.Contador > ncf.NumFin - 10)
+            {
+                ViewBag.NcfCont("Su NCF se esta acercando al limite del Final Rango ",ncf.NumFin);
+            }
             if (!string.IsNullOrEmpty(searchString))
             {
                 factura = factura.Where(c => c.Ncf.Contains(searchString)
@@ -334,6 +339,11 @@ namespace FacturadorTaller.Controllers
             table1.AddCell("Total General RD: " + totalFac.ToString("C0"));
 
             doc.Add(table1);
+
+            para = new Paragraph();
+            para.Add("______________________________ \nFirma Cliente");
+            celda1.AddElement(para);
+            doc.Add(para);
 
             doc.Close();
             doc.Dispose();

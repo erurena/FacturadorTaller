@@ -45,7 +45,8 @@ namespace FacturadorTaller.Controllers
 
             ViewBag.CurrentFilter = searchString;
             var cotizacion = from s in DB.Cotizacion.Include(f => f.Clientes)
-                          select s;
+                             .Where(f => f.FacturaEst !="S")
+                              select s;
             if (!string.IsNullOrEmpty(searchString))
             {
                 cotizacion = cotizacion.Where(c => c.Clientes.NombreCliente.Contains(searchString)
@@ -444,11 +445,6 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
-            para = new Paragraph();
-            para.Add("______________________________ \nFirma Cliente");
-            celda1.AddElement(para);
-            doc.Add(para);
-
             doc.Close();
             doc.Dispose();
             output.Dispose();
@@ -587,11 +583,6 @@ namespace FacturadorTaller.Controllers
             table1.AddCell("Total General RD: " + totalFac.ToString("C0"));
 
             doc.Add(table1);
-
-            para = new Paragraph();
-            para.Add("______________________________ \nFirma Cliente");
-            celda1.AddElement(para);
-            doc.Add(para);
 
             doc.Close();
             doc.Dispose();
@@ -733,7 +724,31 @@ namespace FacturadorTaller.Controllers
                     var fechaFac = mod.GetDateF();
                     var fechaVen = mod.GetDateFv();
                     var ncf = mod.NcfInd;
+                    if (ncf == "S")
+                    {
+                        var ncfMo = DB.Ncf.Where(n => n.Estatus == null).FirstOrDefault();
+                        var ncfAct = (ncfMo.NumInicio - ncfMo.NumFin + ncfMo.Contador) + ncfMo.NumFin;
+                        var ncfCont = ncfAct - ncfMo.NumFin + ncfMo.NumFin;
+                        var ncfReleg = ncfAct.ToString().Length;
+                        var ncfCero = new string ('0', (8 - ncfReleg));
+                        ncf = string.Concat(ncfMo.Inicio + ncfCero +  ncfAct);
+                        if (ncfCont == ncfMo.NumFin)
+                        {
+                            ncfMo.Estatus = "C";
+                        }
+                        ncfMo.Contador = ncfCont;
+                        ncfMo.NumActual = ncfAct;
+                        DB.SaveChanges();
+                    }
+                    else
+                    {
+                        ncf = "";
+                    }
                     var ordenCompra = mod.Factura.OrdenCompraNu;
+
+                    Cotizacion cotm = DB.Cotizacion.Find(cotId);
+                    cotm.FacturaEst = "S";
+                    DB.SaveChanges();
 
                     Factura file = new Factura();
 

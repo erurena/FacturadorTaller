@@ -13,8 +13,10 @@ namespace FacturadorTaller.Models
 
         public int CotizacionId { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaFac { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaVen { get; set; }
 
         public string Ncf { get; set; }

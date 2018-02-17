@@ -62,7 +62,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Pago.Categoria)
         @Html.RadioButtonFor(model => model.Pago.Categoria, "Efectivo", new { @checked = true }) Efectivo
-        @Html.RadioButtonFor(model => model.Pago.Categoria, "Tarjeta") Tarjeta
+        @Html.RadioButtonFor(model => model.Pago.Categoria, "Cheque") Cheque
+        @Html.RadioButtonFor(model => model.Pago.Categoria, "Cheque") Transferencia
         @Html.ValidationMessageFor(model => model.Pago.Categoria, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">

@@ -20,5 +20,7 @@ namespace FacturadorTaller.Models
         public int NumFin { get; set; }
 
         public int NumActual { get; set; }
+
+        public string Estatus { get; set; }
     }
 }
