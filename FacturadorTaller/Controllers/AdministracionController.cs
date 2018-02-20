@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -7,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using FacturadorTaller.Models;
 using FacturadorTaller.ViewModel;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using PagedList;
 
 namespace FacturadorTaller.Controllers
@@ -165,6 +168,46 @@ namespace FacturadorTaller.Controllers
             return View(mod);
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult IndexUser()
+        {
+
+
+            var users = DB.Users.Include(u => u.Roles);
+
+            var userVM = users.Select(user => new UserViewModel
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                RoleName = user.Roles.Select(r => r.RoleId).FirstOrDefault(),
+            }).ToList();
+
+            var model = new GroupedUserViewModel { Users = userVM };
+            return View(model);
+        }
+        public ActionResult EliminarRoles(string NomUsuario)
+        {
+            if (NomUsuario == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var VmRol = new EliminarRolViewModel();
+            VmRol.ApplicationUser = DB.Users.Where(u => u.UserName.Equals(NomUsuario, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            ApplicationUserManager UserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            VmRol.RoleA = UserManager.GetRoles(VmRol.ApplicationUser.Id).FirstOrDefault();
+            return View(VmRol);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EliminarRoles(EliminarRolViewModel mod)
+        {
+            var nombreUsu = mod.ApplicationUser.UserName;
+            ApplicationUser user = DB.Users.Where(u => u.UserName.Equals(nombreUsu, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            ApplicationUserManager UserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var roles = UserManager.GetRoles(user.Id);
+            UserManager.RemoveFromRoles(user.Id, roles.ToArray());
+            return RedirectToAction("IndexUser");
+        }
 
 
 

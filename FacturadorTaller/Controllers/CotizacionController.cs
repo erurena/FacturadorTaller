@@ -759,7 +759,7 @@ namespace FacturadorTaller.Controllers
                     file.OrdenCompraNu = ordenCompra;
                     DB.Factura.Add(file);
                     DB.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Pdf", "Factura", new {id = file.FacturaId, cotId = file.CotizacionId });
                 }
             }
             catch (RetryLimitExceededException  /* dex */)

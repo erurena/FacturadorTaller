@@ -228,6 +228,7 @@
     <Compile Include="ViewModel\CotizacionViewModel.cs" />
     <Compile Include="ViewModel\CreafacturaViewModel.cs" />
     <Compile Include="ViewModel\DetalleCotViewModel.cs" />
+    <Compile Include="ViewModel\EliminarRolViewModel.cs" />
     <Compile Include="ViewModel\FacturaViewModel.cs" />
     <Compile Include="ViewModel\PagoViewModel.cs" />
     <Compile Include="ViewModel\ValidDate.cs" />
@@ -367,6 +368,8 @@
     <Content Include="Views\Administracion\IndexNcf.cshtml" />
     <Content Include="Views\Administracion\CreateNcf.cshtml" />
     <Content Include="Views\Administracion\EditNcf.cshtml" />
+    <Content Include="Views\Administracion\IndexUser.cshtml" />
+    <Content Include="Views\Administracion\EliminarRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
