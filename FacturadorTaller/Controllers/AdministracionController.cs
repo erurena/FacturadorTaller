@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -27,7 +28,101 @@ namespace FacturadorTaller.Controllers
         {
             return View();
         }
+        //[Authorize(Roles = "Admin")]
+        public ActionResult Fechaventa()
+        {
+            ViewBag.User = new SelectList(DB.Users.ToList(), "UserName", "UserName");
+            return View();
+        }
 
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult Fechaventa(string feci, string fef, string UserName)
+        {
+            var fechi = feci;
+            var fechf = fef;
+            var caj = UserName;
+            return RedirectToAction("Ventas", new { Fechai = feci, Fechaf = fef, Cajero = caj });
+
+        }
+
+       // [Authorize(Roles = "Admin")]
+        public ActionResult Ventas(string Fechai, string Fechaf, string Cajero)
+        {
+            var cajero = Cajero;
+            var fecIni = DateTime.ParseExact(Fechai, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var fecFin = DateTime.ParseExact(Fechaf, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var vm = new ReporteVentasViewModel();
+            if (cajero != null)
+            {
+                vm.Pago = DB.Pago.Include(p => p.Factura.Cotizacion.Clientes)
+                    .Where(p => p.CajeroId.Equals(cajero) && p.FechaPago >= fecIni && p.FechaPago <= fecFin);
+
+            }
+            else
+            {
+                vm.Pago = DB.Pago.Include(p => p.Factura.Cotizacion.Clientes)
+                    .Where(p => p.FechaPago >= fecIni && p.FechaPago <= fecFin);
+            }
+
+            return View(vm);
+        }
+        //[Authorize(Roles = "Admin")]
+        public ActionResult FechaventaFac()
+        {
+            return View();
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult FechaventaFac(string feci, string fef)
+        {
+            var fechi = feci;
+            var fechf = fef;
+            return RedirectToAction("FacVentas", new { Fechai = feci, Fechaf = fef });
+
+        }
+
+        // [Authorize(Roles = "Admin")]
+        public ActionResult FacVentas(string Fechai, string Fechaf)
+        {
+            var fecIni = DateTime.ParseExact(Fechai, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var fecFin = DateTime.ParseExact(Fechaf, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var vm = new ReporteFacViewModel();
+            vm.Factura = DB.Factura.Include(c => c.Cotizacion.Clientes)
+                            .Where(c => c.FechaFac >= fecIni && c.FechaFac <= fecFin);
+
+            return View(vm);
+        }
+        //[Authorize(Roles = "Admin")]
+        public ActionResult Fechaventaprod()
+        {
+            return View();
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult Fechaventaprod(int clienteId, string cliente, string feci, string fef)
+        {
+            var clienteI = clienteId;
+            var fechi = feci;
+            var fechf = fef;
+            return RedirectToAction("Ventasprod", new {Cliente = clienteI,  Fechai = fechi, Fechaf = fechf });
+
+        }
+        //[Authorize(Roles = "Admin")]
+        public ActionResult Ventasprod(int Cliente, string Fechai, string Fechaf)
+        {
+            var clienteId = Cliente;
+            var fecIni = DateTime.ParseExact(Fechai, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var fecFin = DateTime.ParseExact(Fechaf, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var vm = new DetalleCotViewModel();
+            vm.Clientes = DB.Clientes.Find(clienteId);
+            vm.DetalleCot = DB.DetalleCot.Include(f => f.Producto)
+                            .Include(f => f.Cotizacion)
+                .Where(f => f.Cotizacion.Fecha >= fecIni && f.Cotizacion.Fecha <= fecFin && f.Cotizacion.ClienteId== clienteId);
+            return View(vm);
+        }
         // GET: Cliente
         //[Authorize(Roles = "Admin")]
         public ActionResult IndexNcf(string sortOrder, string currentFilter, string searchString, int? page)
@@ -168,7 +263,7 @@ namespace FacturadorTaller.Controllers
             return View(mod);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult IndexUser()
         {
 
@@ -197,7 +292,7 @@ namespace FacturadorTaller.Controllers
             VmRol.RoleA = UserManager.GetRoles(VmRol.ApplicationUser.Id).FirstOrDefault();
             return View(VmRol);
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EliminarRoles(EliminarRolViewModel mod)
         {

@@ -231,6 +231,8 @@
     <Compile Include="ViewModel\EliminarRolViewModel.cs" />
     <Compile Include="ViewModel\FacturaViewModel.cs" />
     <Compile Include="ViewModel\PagoViewModel.cs" />
+    <Compile Include="ViewModel\ReporteFacViewModel.cs" />
+    <Compile Include="ViewModel\ReporteVentasViewModel.cs" />
     <Compile Include="ViewModel\ValidDate.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -370,6 +372,12 @@
     <Content Include="Views\Administracion\EditNcf.cshtml" />
     <Content Include="Views\Administracion\IndexUser.cshtml" />
     <Content Include="Views\Administracion\EliminarRoles.cshtml" />
+    <Content Include="Views\Administracion\Fechaventa.cshtml" />
+    <Content Include="Views\Administracion\Ventas.cshtml" />
+    <Content Include="Views\Administracion\Fechaventaprod.cshtml" />
+    <Content Include="Views\Administracion\Ventasprod.cshtml" />
+    <Content Include="Views\Administracion\FechaventaFac.cshtml" />
+    <Content Include="Views\Administracion\FacVentas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

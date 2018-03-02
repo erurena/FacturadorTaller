@@ -1,0 +1,63 @@
+﻿@model FacturadorTaller.ViewModel.DetalleCotViewModel
+@{
+    ViewBag.Title = "Ventasprod";
+}
+
+<h2>Ventas Cliente por Productos</h2>
+<h4>@Html.DisplayFor(m => m.Clientes.NombreCliente)</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            Cantidad
+        </th>
+        <th>
+            Producto
+        </th>
+        <th>
+            Precio
+        </th>
+        <th>
+            Itbis
+        </th>
+        <th>
+            Cotizacion
+        </th>
+        <th>
+            Categoria
+        </th>
+    </tr>
+
+    @foreach (var item in Model.DetalleCot)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelitem => item.Cantidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.Producto.NombreProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.Valor)
+        </td>
+        <td>
+            @{ 
+                var itbis = item.Valor * 0.18m;
+            }
+            @itbis
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.CotizacionId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.Producto.Categoria)
+        </td>
+    </tr>
+    }
+</table>
+
+<div>
+    @Html.ActionLink("Volver a lista", "Index")
+
+</div>
+
