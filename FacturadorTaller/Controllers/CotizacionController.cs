@@ -232,7 +232,7 @@ namespace FacturadorTaller.Controllers
                     DB.SaveChanges();
 
                     Decimal monto = DB.DetalleCot
-                                    .Where(d => d.CotizacionId == cotId)
+                                    .Where(d => d.CotizacionId == cotId && d.Producto.Categoria == "Servicio")
                                     .Sum(m => m.Cantidad * m.Valor);
                     Decimal itbis = monto * 0.18m;
 
@@ -336,7 +336,7 @@ namespace FacturadorTaller.Controllers
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
                             .FirstOrDefault(c => c.CotizacionId == cot.Cotizacion.CotizacionId);
             VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId)
+                .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Producto")
                 .OrderByDescending(c => c.CotizacionId);
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
             var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Doris De Los Santos</p><p>EjecutivoVentas</p>";

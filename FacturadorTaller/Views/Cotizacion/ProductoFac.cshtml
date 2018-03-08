@@ -103,36 +103,59 @@
 
     @foreach (var item in Model.DetalleCot)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelitem => item.Cantidad)
-        </td>
-        <td>
-            @Html.DisplayFor(modelitem => item.Producto.NombreProducto)
-        </td>
-        <td>
-            @Html.DisplayFor(modelitem => item.Valor)
-        </td>
-        <td>
-            @Html.DisplayFor(modelitem => item.FichaVehiculo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelitem => item.Comentario)
-        </td>
-        <td>
-            @Html.ActionLink("Eliminar", "ProDelete", new { id = item.DetalleCotId })
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "ProEdit", new { id = item.DetalleCotId })
-        </td>
-    </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelitem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Producto.NombreProducto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.FichaVehiculo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Comentario)
+            </td>
+            <td>
+                @Html.ActionLink("Eliminar", "ProDelete", new { id = item.DetalleCotId })
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "ProEdit", new { id = item.DetalleCotId })
+            </td>
+        </tr>
     }
 
 
 </table>
+@{decimal totalFac = 0; }
+
+@foreach (var c in Model.DetalleCot)
+{
+    if (c.Producto.Categoria == "Servicio")
+    {
+        totalFac += c.Valor;
+    }
+}
+@{decimal totalCos = 0; }
+
+@foreach (var c in Model.DetalleCot)
+{
+    if (c.Producto.Categoria == "Producto")
+    {
+        totalCos += c.Valor;
+    }
+}
+
+<H2>Total Facturado : @totalFac </H2>
+<H2>Total Costo: @totalCos</H2>
+<H2>Ganancia: @totalFac- @totalCos</H2>
+<br />
 <div>
     @Html.ActionLink("Volver a lista", "Index") |
-    @Html.ActionLink("Email", "Email", new { id = Model.Cotizacion.CotizacionId})
+    @Html.ActionLink("Email", "Email", new { id = Model.Cotizacion.CotizacionId })
 
 </div>
 @section Scripts {

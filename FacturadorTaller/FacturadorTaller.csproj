@@ -378,6 +378,8 @@
     <Content Include="Views\Administracion\Ventasprod.cshtml" />
     <Content Include="Views\Administracion\FechaventaFac.cshtml" />
     <Content Include="Views\Administracion\FacVentas.cshtml" />
+    <Content Include="Views\Administracion\FechaventaEmp.cshtml" />
+    <Content Include="Views\Administracion\Ventasemp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

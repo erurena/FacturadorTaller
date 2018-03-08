@@ -123,6 +123,34 @@ namespace FacturadorTaller.Controllers
                 .Where(f => f.Cotizacion.Fecha >= fecIni && f.Cotizacion.Fecha <= fecFin && f.Cotizacion.ClienteId== clienteId);
             return View(vm);
         }
+        //[Authorize(Roles = "Admin")]
+        public ActionResult FechaventaEmp()
+        {
+            return View();
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult FechaventaEmp(int productoId, string emp, string feci, string fef)
+        {
+            var productoI = productoId;
+            var fechi = feci;
+            var fechf = fef;
+            return RedirectToAction("Ventasemp", new { Producto = productoI, Fechai = fechi, Fechaf = fechf });
+
+        }
+        //[Authorize(Roles = "Admin")]
+        public ActionResult Ventasemp(int Producto, string Fechai, string Fechaf)
+        {
+            var productoId = Producto;
+            var fecIni = DateTime.ParseExact(Fechai, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var fecFin = DateTime.ParseExact(Fechaf, "d/MM/yyyy", CultureInfo.InvariantCulture);
+            var vm = new DetalleCotViewModel();
+            vm.DetalleCot = DB.DetalleCot.Include(f => f.Producto)
+                            .Include(f => f.Cotizacion)
+                .Where(f => f.Cotizacion.Fecha >= fecIni && f.Cotizacion.Fecha <= fecFin);
+            return View(vm);
+        }
         // GET: Cliente
         //[Authorize(Roles = "Admin")]
         public ActionResult IndexNcf(string sortOrder, string currentFilter, string searchString, int? page)
