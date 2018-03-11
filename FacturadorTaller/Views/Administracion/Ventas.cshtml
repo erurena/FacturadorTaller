@@ -64,9 +64,9 @@
 {
     transferencia += i.MontoPago;
 }
-<H2>Total Efectivo: @efectivo </H2>
-<H2>Total Tarjeta: @cheque </H2>
-<H2>Total Tarjeta: @transferencia </H2>
+<H2>Total Efectivo: @string.Format("{0:N0}", @efectivo) </H2>
+<H2>Total Tarjeta: @string.Format("{0:N0}", @cheque) </H2>
+<H2>Total Transferencia: @string.Format("{0:N0}", @transferencia) </H2>
 <br />
 
 <div>

@@ -17,6 +17,7 @@ namespace FacturadorTaller.Models
 
         public DateTime FechaPago { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public Decimal MontoPago { get; set; }
 
         public string Categoria { get; set; }

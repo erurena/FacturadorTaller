@@ -71,8 +71,8 @@
     itbis += i.Cotizacion.Itbis;
 }
 
-<H2>Total : @total </H2>
-<H2>Itbis Facturado: @itbis</H2>
+<H2>Total :@string.Format("{0:N0}", @total) </H2>
+<H2>Itbis Facturado:@string.Format("{0:N0}", @itbis)</H2>
 <br />
 
 <div>

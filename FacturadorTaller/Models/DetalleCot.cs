@@ -19,6 +19,7 @@ namespace FacturadorTaller.Models
 
         public string FichaVehiculo { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public decimal Valor { get; set; }
 
         public string Comentario { get; set; }

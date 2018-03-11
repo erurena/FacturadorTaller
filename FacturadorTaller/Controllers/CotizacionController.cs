@@ -28,7 +28,7 @@ namespace FacturadorTaller.Controllers
             DB = new ApplicationDBContext();
         }
 
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -74,7 +74,7 @@ namespace FacturadorTaller.Controllers
             return View(cotizacion.ToPagedList(pageNumber, pageSize));
         }
 
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -92,13 +92,13 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET : Cotizacion/Create
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult CreateCot()
         {
             return View();
         }
         // POST: Cotizacion/Create
-       // [Authorize(Roles = "Admin, Usuario")]
+       [Authorize(Roles = "Admin, Usuario")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateCot(CotizacionViewModel cot)
@@ -134,7 +134,7 @@ namespace FacturadorTaller.Controllers
          }
 
         // GET: Factura/Edit/5
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -152,7 +152,7 @@ namespace FacturadorTaller.Controllers
             return View(VM);
         }
 
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int? id, CotizacionViewModel mod)
@@ -185,7 +185,7 @@ namespace FacturadorTaller.Controllers
 
 
         //GET: DetalleProductos/Create
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult ProductoFac(int? cotId)
         {
             if (cotId == null)
@@ -203,7 +203,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // POST: DetalleProductos/Create
-        // [Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ProductoFac(DetalleCotViewModel cot, int productoId)
@@ -255,7 +255,7 @@ namespace FacturadorTaller.Controllers
 
         }
         // Delete Cotizacion
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CotDelete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -277,7 +277,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // POST: Cotizacion/Delete/
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("CotDelete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteCotConfirmed(CotizacionViewModel fac)
@@ -303,7 +303,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // Email Cotizacion
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Email (int? id)
         {
             if (id == null)
@@ -322,7 +322,7 @@ namespace FacturadorTaller.Controllers
             }
             return View(VM);
         }
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Email (CotizacionViewModel cot)
@@ -470,6 +470,7 @@ namespace FacturadorTaller.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Usuario")]
         public FileStreamResult Pdf (int? id)
         {
             var VM = new CotizacionViewModel();
@@ -594,7 +595,7 @@ namespace FacturadorTaller.Controllers
 
 
         // Delete Produto Cotizacion
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult ProDelete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -616,7 +617,7 @@ namespace FacturadorTaller.Controllers
 
 
         // POST: Producto/Delete/
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("ProDelete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteProConfirmed(DetalleCot det)
@@ -648,7 +649,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Cliente/Edit/5
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult ProEdit(int? id)
         {
             if (id == null)
@@ -663,7 +664,7 @@ namespace FacturadorTaller.Controllers
             }
             return View(detalleCot);
         }
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost, ActionName("ProEdit")]
         [ValidateAntiForgeryToken]
         public ActionResult ProEditPost(int? id, DetalleCot mod)
@@ -699,7 +700,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Factura/Edit/5
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult CreaFactura (int id)
         {
             var VM = new CreafacturaViewModel();
@@ -707,7 +708,7 @@ namespace FacturadorTaller.Controllers
             return View(VM);
         }
 
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost, ActionName("CreaFactura")]
         [ValidateAntiForgeryToken]
         public ActionResult CreaFactura(CreafacturaViewModel mod)

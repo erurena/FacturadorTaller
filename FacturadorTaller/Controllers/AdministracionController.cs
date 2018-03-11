@@ -23,19 +23,19 @@ namespace FacturadorTaller.Controllers
             DB = new ApplicationDBContext();
         }
         // GET: Administracion
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View();
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Fechaventa()
         {
             ViewBag.User = new SelectList(DB.Users.ToList(), "UserName", "UserName");
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Fechaventa(string feci, string fef, string UserName)
         {
@@ -46,7 +46,7 @@ namespace FacturadorTaller.Controllers
 
         }
 
-       // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Ventas(string Fechai, string Fechaf, string Cajero)
         {
             var cajero = Cajero;
@@ -67,13 +67,13 @@ namespace FacturadorTaller.Controllers
 
             return View(vm);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult FechaventaFac()
         {
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult FechaventaFac(string feci, string fef)
         {
@@ -83,7 +83,7 @@ namespace FacturadorTaller.Controllers
 
         }
 
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult FacVentas(string Fechai, string Fechaf)
         {
             var fecIni = DateTime.ParseExact(Fechai, "d/MM/yyyy", CultureInfo.InvariantCulture);
@@ -94,13 +94,13 @@ namespace FacturadorTaller.Controllers
 
             return View(vm);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Fechaventaprod()
         {
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Fechaventaprod(int clienteId, string cliente, string feci, string fef)
         {
@@ -110,7 +110,7 @@ namespace FacturadorTaller.Controllers
             return RedirectToAction("Ventasprod", new {Cliente = clienteI,  Fechai = fechi, Fechaf = fechf });
 
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Ventasprod(int Cliente, string Fechai, string Fechaf)
         {
             var clienteId = Cliente;
@@ -123,13 +123,13 @@ namespace FacturadorTaller.Controllers
                 .Where(f => f.Cotizacion.Fecha >= fecIni && f.Cotizacion.Fecha <= fecFin && f.Cotizacion.ClienteId== clienteId);
             return View(vm);
         }
-        //[Authorize(Roles = "Admin")]
+       [Authorize(Roles = "Admin")]
         public ActionResult FechaventaEmp()
         {
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult FechaventaEmp(int productoId, string emp, string feci, string fef)
         {
@@ -139,7 +139,7 @@ namespace FacturadorTaller.Controllers
             return RedirectToAction("Ventasemp", new { Producto = productoI, Fechai = fechi, Fechaf = fechf });
 
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Ventasemp(int Producto, string Fechai, string Fechaf)
         {
             var productoId = Producto;
@@ -152,7 +152,7 @@ namespace FacturadorTaller.Controllers
             return View(vm);
         }
         // GET: Cliente
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult IndexNcf(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -198,14 +198,14 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET : Ncf/Create
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateNcf()
         {
             return View();
         }
 
         // POST: Cliente/Create
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateNcf(Ncf ncf)
@@ -217,13 +217,11 @@ namespace FacturadorTaller.Controllers
                     var ini = ncf.Inicio;
                     var numIni = ncf.NumInicio;
                     var numFin = ncf.NumFin;
-                    var cont = ncf.Contador;
 
                     var file = new Ncf();
                     file.Inicio = ini;
                     file.NumInicio = numIni;
                     file.NumFin = numFin;
-                    file.Contador = cont;
 
                     DB.Ncf.Add(file);
                     DB.SaveChanges();
@@ -241,7 +239,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Cliente/Edit/5
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult EditNcf(int? id)
         {
             if (id == null)
@@ -256,7 +254,7 @@ namespace FacturadorTaller.Controllers
             }
             return View(ncf);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("EditNcf")]
         [ValidateAntiForgeryToken]
         public ActionResult EditNPost(int? id, Ncf mod)
@@ -272,13 +270,12 @@ namespace FacturadorTaller.Controllers
                     var ini = mod.Inicio;
                     var numIni = mod.NumInicio;
                     var numFin = mod.NumFin;
-                    var cont = mod.Contador;
+
 
                     Ncf ncf = DB.Ncf.Find(id);
                     ncf.Inicio = ini;
                     ncf.NumInicio = numIni;
                     ncf.NumFin = numFin;
-                    ncf.Contador = cont;
                     DB.SaveChanges();
                     return RedirectToAction("IndexNcf");
                 }
@@ -291,7 +288,7 @@ namespace FacturadorTaller.Controllers
             return View(mod);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult IndexUser()
         {
 
@@ -320,7 +317,7 @@ namespace FacturadorTaller.Controllers
             VmRol.RoleA = UserManager.GetRoles(VmRol.ApplicationUser.Id).FirstOrDefault();
             return View(VmRol);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EliminarRoles(EliminarRolViewModel mod)
         {

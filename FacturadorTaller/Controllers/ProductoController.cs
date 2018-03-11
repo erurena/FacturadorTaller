@@ -19,7 +19,7 @@ namespace FacturadorTaller.Controllers
             DB = new ApplicationDBContext();
         }
         // GET: Cliente
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -63,7 +63,7 @@ namespace FacturadorTaller.Controllers
             return View(producto.ToPagedList(pageNumber, pageSize));
         }
 
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -79,14 +79,14 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET : Clientes/Create
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: Cliente/Create
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Producto prod)
@@ -117,7 +117,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Cliente/Edit/5
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -132,7 +132,7 @@ namespace FacturadorTaller.Controllers
             }
             return View(producto);
         }
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int? id, Producto mod)
@@ -164,7 +164,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Cliente /Delete/5
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -184,7 +184,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // POST: producto/Delete/5
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

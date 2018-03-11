@@ -28,7 +28,7 @@ namespace FacturadorTaller.Controllers
             DB = new ApplicationDBContext();
         }
         // GET: Factura
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -50,7 +50,7 @@ namespace FacturadorTaller.Controllers
             var ncf = DB.Ncf.Where(n => n.Estatus == null).SingleOrDefault();
             if (ncf.Contador > ncf.NumFin - 10)
             {
-                ViewBag.NcfCont("Su NCF se esta acercando al limite del Final Rango ",ncf.NumFin);
+                ViewBag.NcfCont = " *** Su NCF se esta acercando al limite del Final Rango : "+ncf.NumFin;
             }
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -80,7 +80,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Factura/Edit/5
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -98,7 +98,7 @@ namespace FacturadorTaller.Controllers
             return View(VM);
         }
 
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(CreafacturaViewModel mod)
@@ -133,7 +133,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Pagos
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Pago(int? id)
         {
             if (id == null)
@@ -156,7 +156,7 @@ namespace FacturadorTaller.Controllers
             }
             return View(VM);
         }
-        //[Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin, Usuario")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Pago(PagoViewModel pag)
@@ -214,6 +214,7 @@ namespace FacturadorTaller.Controllers
             return View(pag);
         }
 
+        [Authorize(Roles = "Admin, Usuario")]
         public FileStreamResult Pdf(int? id, int cotId)
         {
             var VM = new FacturaViewModel();

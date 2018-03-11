@@ -15,6 +15,7 @@ namespace FacturadorTaller.Models
 
         public string Descripcion { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public int? Valor { get; set; }
 
         public DateTime Fecha { get; set; }

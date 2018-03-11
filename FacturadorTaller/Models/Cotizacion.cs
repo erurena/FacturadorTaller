@@ -22,8 +22,10 @@ namespace FacturadorTaller.Models
 
         public int ClienteId { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public decimal TotalFactura { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public decimal Itbis { get; set; }
 
         public string FacturaEst { get; set; }
