@@ -380,6 +380,7 @@
     <Content Include="Views\Administracion\FacVentas.cshtml" />
     <Content Include="Views\Administracion\FechaventaEmp.cshtml" />
     <Content Include="Views\Administracion\Ventasemp.cshtml" />
+    <Content Include="Views\Factura\Email.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -339,7 +339,7 @@ namespace FacturadorTaller.Controllers
                 .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Producto")
                 .OrderByDescending(c => c.CotizacionId);
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
-            var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Doris De Los Santos</p><p>EjecutivoVentas</p>";
+            var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
             var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
             if (file.Exists)
             {
@@ -451,8 +451,8 @@ namespace FacturadorTaller.Controllers
 
            MailMessage mail = new MailMessage();
            mail.To.Add(new MailAddress(femail));
-           mail.From = new MailAddress("erikaurena@hotmail.com");
-           mail.Subject = "Cotizacion Nueva";
+           mail.From = new MailAddress("emesolucionessrl@gmail.com");
+           mail.Subject = "Cotizacion Nueva EME Soluciones en General";
            string Body = string.Format(body, VM.Cotizacion.Clientes.NombreCliente);
            mail.Body = Body;
            mail.Attachments.Add(new Attachment(Server.MapPath("/Content/Cotizacion.pdf")));
