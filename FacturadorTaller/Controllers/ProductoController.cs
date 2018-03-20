@@ -97,10 +97,12 @@ namespace FacturadorTaller.Controllers
                 {
                     var nomPro = prod.NombreProducto;
                     var cat  = prod.Categoria;
+                    var preciop = prod.Precio;
 
                     var file = new Producto();
                     file.NombreProducto = nomPro;
                     file.Categoria = cat;
+                    file.Precio = preciop;
                     DB.Producto.Add(file);
                     DB.SaveChanges();
 
@@ -146,10 +148,12 @@ namespace FacturadorTaller.Controllers
                 if (ModelState.IsValid)
                 {
                     var nomPro = mod.NombreProducto;
+                    var precioP = mod.Precio;
                     var cat = mod.Categoria;
 
                     Producto producto = DB.Producto.Find(id);
                     producto.NombreProducto = nomPro;
+                    producto.Precio = precioP;
                     producto.Categoria = cat;
                     DB.SaveChanges();
                     return RedirectToAction("Index");

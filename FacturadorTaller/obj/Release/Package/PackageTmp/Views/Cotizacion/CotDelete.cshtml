@@ -1,0 +1,51 @@
+﻿@model FacturadorTaller.ViewModel.CotizacionViewModel
+
+@{
+    ViewBag.Title = "Eliminar Cotizacion";
+}
+
+<h2>Eliminar Cotizacion</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cotizacion.CotizacionId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cotizacion.CotizacionId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cotizacion.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cotizacion.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cotizacion.Clientes.NombreCliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cotizacion.Clientes.NombreCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cotizacion.TotalFactura)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cotizacion.TotalFactura)
+        </dd>
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Cotizacion.CotizacionId)
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

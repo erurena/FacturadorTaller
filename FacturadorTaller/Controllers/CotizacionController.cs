@@ -787,7 +787,8 @@ namespace FacturadorTaller.Controllers
             return Json(DB.Producto.Select(x => new
             {
                 x.ProductoId,
-                x.NombreProducto
+                x.NombreProducto,
+                x.Precio
             }).ToList(), JsonRequestBehavior.AllowGet);
 
         }

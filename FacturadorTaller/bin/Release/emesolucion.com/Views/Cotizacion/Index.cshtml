@@ -1,0 +1,71 @@
+﻿@model PagedList.IPagedList<FacturadorTaller.Models.Cotizacion>
+    @using PagedList.Mvc;
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+    @{
+        ViewBag.Title = "Cotizacion";
+    }
+
+    <h2>Cotizacion</h2>
+
+    <p>
+        @Html.ActionLink("Nuevo Registro", "CreateCot")
+    </p>
+
+    @using (Html.BeginForm("Index", "Cotizacion", FormMethod.Get))
+    {
+        <p>
+            Busqueda : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("CotizacionId", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("NombreCliente", "Index", new { sortOrder = ViewBag.ClienteSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Telefono
+            </th>
+            <th>
+                Rnc
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelitem => item.CotizacionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.Clientes.NombreCliente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.Clientes.TelefonoCliente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.Clientes.RncCliente)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Email", "Email", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Imprimir", "Pdf", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Facturar", "CreaFactura", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Detalle", "Details", new { id = item.CotizacionId }) |
+                    @Html.ActionLink("Eliminar", "CotDelete", new { id = item.CotizacionId })
+                </td>
+            </tr>
+        }
+
+
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

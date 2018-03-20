@@ -1,0 +1,85 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "FechaventaEmp";
+}
+
+<h2>Trabajos Facturados</h2>
+
+
+@using (Html.BeginForm("FechaventaEmp", "Administracion", FormMethod.Post))
+{
+
+
+
+    <h4>Contratista: </h4>@Html.TextBox("emp", "", new { @class = "form-control", id = "producto" })
+    //<input id="cliente">
+    <input type="hidden" name="productoId" id="productoId" />
+    //@Html.Hidden("cliente", 0, new { id = "clienteId" })
+    <h4>Fecha Inicio : </h4> @Html.TextBox("feci", "", new { @class = "form-control", @Value = DateTime.Now.ToString("dd/MM/yyyy") })
+    <h4>Fecha Fin    : </h4>@Html.TextBox("fef", "", new { @class = "form-control", @Value = DateTime.Now.ToString("dd/MM/yyyy") })
+    //<h2>Fecha Inicio : </h2> <input type="text" id="feci" name="feci" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+    //<h2>Fecha Fin : </h2> <input type="text" id="fef" name="fef" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Buscar" class="btn btn-primary btn-lg" />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script>
+        $(document).on('submit', 'form', function () {
+            var buttons = $(this).find('[type="submit"]');
+            if ($(this).valid()) {
+                buttons.each(function (btn) {
+                    $(buttons[btn]).prop('disabled', true);
+                });
+            } else {
+                buttons.each(function (btn) {
+                    $(buttons[btn]).prop('disabled', false);
+                });
+            }
+        });
+
+        $.getJSON('/Cotizacion/GetProductos', function (data, jqXHR) {
+            var results = $.map(data, function (item) {
+                return {
+                    label: item.NombreProducto,
+                    value: item.ProductoId
+                }
+            });//Remenber Map object
+            setupAutocomplete(results);
+
+        });
+
+        function setupAutocomplete(results) {
+            $('#producto').autocomplete({
+                source: results,
+                minLength: 2,
+                focus: function (event, ui) {
+                    $("#producto").val(ui.item.label);
+                    return false;
+                },
+                select: function (event, ui) {
+                    //log( ui.item ? "Selected: " + ui.item.label :"Nothing selected, input was " + this.value);
+
+                    $("#producto").val(ui.item.label);
+                    $("#productoId").val(ui.item.value);
+
+
+                    return false;
+
+                }
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    </script>
+
+}

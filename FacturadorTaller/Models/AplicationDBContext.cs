@@ -54,6 +54,10 @@ namespace FacturadorTaller.Models
                 .Property(e => e.Valor)
                 .HasPrecision(18, 0);
 
+            modelBuilder.Entity<Producto>()
+                .Property(e => e.Precio)
+                .HasPrecision(18, 0);
+
             modelBuilder.Entity<Pago>()
                 .Property(e => e.MontoPago)
                 .HasPrecision(18, 0);

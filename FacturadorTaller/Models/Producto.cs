@@ -21,6 +21,9 @@ namespace FacturadorTaller.Models
 
         public string Categoria { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
+        public decimal Precio { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetalleCot> DetalleCot { get; set; }
     }

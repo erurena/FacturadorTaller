@@ -1,0 +1,54 @@
+﻿@model FacturadorTaller.Models.Clientes
+
+<h2>Detalles Clientes</h2>
+
+<div class="vista">
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.NombreCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.NombreCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.RncCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.RncCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.DireccionCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.DireccionCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.CorreoCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.CorreoCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.TelefonoCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.TelefonoCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.ContactoCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.ContactoCliente)
+        </dd>
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

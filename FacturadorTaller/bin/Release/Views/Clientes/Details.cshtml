@@ -1,0 +1,53 @@
+﻿@model FacturadorTaller.Models.Clientes
+@{
+    ViewBag.Title = "Detalle";
+}
+
+<h2>Detalles Clientes</h2>
+
+<div class="vista">
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.NombreCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.NombreCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.RncCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.RncCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.DireccionCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.DireccionCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.CorreoCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.CorreoCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.TelefonoCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.TelefonoCliente)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.ContactoCliente)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.ContactoCliente)
+        </dd>
+    </dl>
+    <div class="final">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.ClienteId }) |
+        @Html.ActionLink("Volver a lista", "Index")
+    </div>
+</div>
+
