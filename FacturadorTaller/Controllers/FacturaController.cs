@@ -49,10 +49,13 @@ namespace FacturadorTaller.Controllers
                           .Where(f => f.PagoStatus !="S")
                              select s;
             var ncf = DB.Ncf.Where(n => n.Estatus == null).SingleOrDefault();
-            if (ncf.Contador > ncf.NumFin - 10)
-            {
-                ViewBag.NcfCont = " *** Su NCF se esta acercando al limite del Final Rango : "+ncf.NumFin;
-            }
+            if (ncf !=null)
+             {
+                   if (ncf.Contador > ncf.NumFin - 10)
+                   {
+                       ViewBag.NcfCont = " *** Su NCF se esta acercando al limite del Final Rango : " + ncf.NumFin;
+                   }
+             }
             if (!string.IsNullOrEmpty(searchString))
             {
                 factura = factura.Where(c => c.Ncf.Contains(searchString)

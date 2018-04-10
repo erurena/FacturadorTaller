@@ -336,7 +336,7 @@ namespace FacturadorTaller.Controllers
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
                             .FirstOrDefault(c => c.CotizacionId == cot.Cotizacion.CotizacionId);
             VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Producto")
+                .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
             var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
@@ -477,7 +477,7 @@ namespace FacturadorTaller.Controllers
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
                             .FirstOrDefault(c => c.CotizacionId == id);
             VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == id)
+                .Where(c => c.CotizacionId == id && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
             var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));

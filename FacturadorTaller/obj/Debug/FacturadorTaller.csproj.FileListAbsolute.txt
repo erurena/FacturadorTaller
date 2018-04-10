@@ -141,7 +141,6 @@ C:\FacturadorTaller\FacturadorTaller\bin\Microsoft.Owin.Security.OAuth.xml
 C:\FacturadorTaller\FacturadorTaller\bin\Microsoft.Owin.Security.Google.xml
 C:\FacturadorTaller\FacturadorTaller\bin\Microsoft.Owin.Security.Twitter.xml
 C:\FacturadorTaller\FacturadorTaller\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.csprojResolveAssemblyReference.cache
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.dll
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.pdb
 C:\FacturadorTaller\FacturadorTaller\obj\Debug\FacturadorTaller.csproj.CoreCompileInputs.cache
