@@ -14,7 +14,8 @@ namespace FacturadorTaller.ViewModel
 
         [EmailAddress(ErrorMessage ="Correo Invalido !!!")]
         public string Email { get; set; }
-       
+        public string Nota { get; set; }
+
         public Clientes Clientes { get; set; }
         public Cotizacion Cotizacion { get; set; }
         public IEnumerable<DetalleCot> DetalleCot { get; set; }

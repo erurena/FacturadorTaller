@@ -110,11 +110,13 @@ namespace FacturadorTaller.Controllers
                     var usuario = User.Identity.GetUserName();
                     var cliente = cot.Cotizacion.Clientes.ClienteId;
                     var fecha = cot.GetDate();
+                    var nota = cot.Cotizacion.Nota;
 
                     Cotizacion file = new Cotizacion();
 
                     file.ClienteId = cliente;
                     file.Fecha = fecha;
+                    file.Nota = nota;
 
                     DB.Cotizacion.Add(file);
                     DB.SaveChanges();
@@ -167,10 +169,12 @@ namespace FacturadorTaller.Controllers
                 {
                     var cliente = mod.Cotizacion.Clientes.ClienteId;
                     var fecha = mod.GetDate();
+                    var nota = mod.Cotizacion.Nota;
 
                     Cotizacion file = DB.Cotizacion.Find(id);
                     file.ClienteId = cliente;
                     file.Fecha = fecha;
+                    file.Nota = nota;
                     DB.SaveChanges();
                     return RedirectToAction("ProductoFac", new { cotId = file.CotizacionId });
                 }
@@ -332,6 +336,7 @@ namespace FacturadorTaller.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             string femail = cot.Email;
+            string notaEmail = cot.Nota;
             var VM = new CotizacionViewModel();
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
                             .FirstOrDefault(c => c.CotizacionId == cot.Cotizacion.CotizacionId);
@@ -339,7 +344,7 @@ namespace FacturadorTaller.Controllers
                 .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
-            var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
+            var body = "<p>Cliente: {0} </p> </p><p>{1}</p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
             var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
             if (file.Exists)
             {
@@ -407,6 +412,11 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.Comentario);
                 table1.AddCell(detalle.Valor.ToString("C"));
             }
+            table1.AddCell("");
+            table1.AddCell("");
+            table1.AddCell(VM.Cotizacion.Nota);
+            table1.AddCell("");
+            table1.AddCell("");
 
             doc.Add(table1);
 
@@ -450,10 +460,12 @@ namespace FacturadorTaller.Controllers
             output.Dispose();
 
            MailMessage mail = new MailMessage();
-           mail.To.Add(new MailAddress(femail));
+           foreach(var to in femail.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)) {
+                mail.To.Add(new MailAddress(to));
+            }
            mail.From = new MailAddress("emesolucionessrl@gmail.com");
            mail.Subject = "Cotizacion Nueva EME Soluciones en General";
-           string Body = string.Format(body, VM.Cotizacion.Clientes.NombreCliente);
+           string Body = string.Format(body, VM.Cotizacion.Clientes.NombreCliente,notaEmail);
            mail.Body = Body;
            mail.Attachments.Add(new Attachment(Server.MapPath("/Content/Cotizacion.pdf")));
            mail.IsBodyHtml = true;
@@ -547,6 +559,12 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.Comentario);
                 table1.AddCell(detalle.Valor.ToString("N0"));
             }
+
+            table1.AddCell("");
+            table1.AddCell("");
+            table1.AddCell(VM.Cotizacion.Nota);
+            table1.AddCell("");
+            table1.AddCell("");
 
             doc.Add(table1);
 
