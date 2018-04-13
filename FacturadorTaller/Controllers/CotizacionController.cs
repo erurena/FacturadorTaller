@@ -648,11 +648,11 @@ namespace FacturadorTaller.Controllers
                 DB.SaveChanges();
 
                 Decimal monto = DB.DetalleCot
-                                    .Where(d => d.CotizacionId == MId)
+                                    .Where(d => d.CotizacionId == detallecot.CotizacionId)
                                     .Sum(m => m.Cantidad * m.Valor);
                 Decimal itbis = monto * 0.18m;
 
-                Cotizacion cotm = DB.Cotizacion.Find(MId);
+                Cotizacion cotm = DB.Cotizacion.Find(detallecot.CotizacionId);
                 cotm.TotalFactura = monto;
                 cotm.Itbis = itbis;
                 DB.SaveChanges();

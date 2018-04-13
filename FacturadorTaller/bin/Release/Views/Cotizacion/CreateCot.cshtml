@@ -21,11 +21,16 @@
     @Html.HiddenFor(model => model.Cotizacion.Clientes.ClienteId, new { id = "clienteId" })
     /*<input id="cliente">
     <input type="hidden" name="clienteId" id="clienteId*/
-    
+
     <div class="form-group">
         @Html.LabelFor(model => model.Fecha)
         @Html.TextBoxFor(model => model.Fecha, new { @class = "form-control", @Value = DateTime.Now.ToString("dd/MM/yyyy") })
         @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Cotizacion.Nota)
+        @Html.TextAreaFor(model => model.Cotizacion.Nota, new { @class = "form-control", rows = "10" })
+        @Html.ValidationMessageFor(model => model.Cotizacion.Nota, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
@@ -58,40 +63,40 @@
         });
 
         $.getJSON('/Cotizacion/GetClientes', function (data, jqXHR) {
-        var results = $.map(data, function (item) {
-            return {
-                label: item.NombreCliente,
-                value: item.ClienteId
-            }
-        });//Remenber Map object
-        setupAutocomplete(results);
+            var results = $.map(data, function (item) {
+                return {
+                    label: item.NombreCliente,
+                    value: item.ClienteId
+                }
+            });//Remenber Map object
+            setupAutocomplete(results);
 
-    });
+        });
 
-    function setupAutocomplete(results) {
-        $('#cliente').autocomplete({
-            source: results,
-            minLength: 2,
-            focus: function (event, ui) {
-                $("#cliente").val(ui.item.label);
-                return false;
-            },
-            select: function (event, ui) {
-                //log( ui.item ? "Selected: " + ui.item.label :"Nothing selected, input was " + this.value);
+        function setupAutocomplete(results) {
+            $('#cliente').autocomplete({
+                source: results,
+                minLength: 2,
+                focus: function (event, ui) {
+                    $("#cliente").val(ui.item.label);
+                    return false;
+                },
+                select: function (event, ui) {
+                    //log( ui.item ? "Selected: " + ui.item.label :"Nothing selected, input was " + this.value);
 
-                $("#cliente").val(ui.item.label);
-                $("#clienteId").val(ui.item.value);
+                    $("#cliente").val(ui.item.label);
+                    $("#clienteId").val(ui.item.value);
 
 
-                return false;
+                    return false;
 
-            }
-        }).autocomplete("instance")._renderItem = function (ul, item) {
-            return $("<li>")
-              .append("<div>" + item.label + "</div>")
-              .appendTo(ul);
-        };
-    }
+                }
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
 
     </script>
 

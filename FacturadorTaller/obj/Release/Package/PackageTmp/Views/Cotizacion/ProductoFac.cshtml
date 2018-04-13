@@ -7,45 +7,52 @@
 
 @using (Html.BeginForm("ProductoFac", "Cotizacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Cotizacion.CotizacionId)
-        </dt>
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.Cotizacion.CotizacionId)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cotizacion.CotizacionId)
-        </dd>
+    <dd>
+        @Html.DisplayFor(model => model.Cotizacion.CotizacionId)
+    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Cotizacion.Clientes.NombreCliente)
-        </dt>
+    <dt>
+        @Html.DisplayNameFor(model => model.Cotizacion.Clientes.NombreCliente)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cotizacion.Clientes.NombreCliente)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Cotizacion.Clientes.RncCliente)
-        </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Cotizacion.Clientes.NombreCliente)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Cotizacion.Clientes.RncCliente)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cotizacion.Clientes.RncCliente)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Cotizacion.TotalFactura)
-        </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Cotizacion.Clientes.RncCliente)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Cotizacion.TotalFactura)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cotizacion.TotalFactura)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Cotizacion.Itbis)
-        </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Cotizacion.TotalFactura)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Cotizacion.Itbis)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cotizacion.Itbis)
-        </dd>
+    <dd>
+        @Html.DisplayFor(model => model.Cotizacion.Itbis)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Cotizacion.Nota)
+    </dt>
 
-    </dl>
+    <dd>
+        @Html.TextAreaFor(model => model.Cotizacion.Nota, new {rows = "8" })
+    </dd>
+
+</dl>
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Cotizacion.CotizacionId)
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
