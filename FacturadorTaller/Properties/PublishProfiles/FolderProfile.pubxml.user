@@ -28,10 +28,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/02/2015 04:32:26</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.dll">
-      <publishTime>04/12/2018 21:30:27</publishTime>
+      <publishTime>04/15/2018 20:37:26</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.pdb">
-      <publishTime>04/12/2018 21:30:27</publishTime>
+      <publishTime>04/15/2018 20:37:26</publishTime>
     </File>
     <File Include="bin/HtmlSanitizationLibrary.dll">
       <publishTime>03/08/2018 13:17:03</publishTime>
@@ -163,7 +163,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/23/2018 13:52:16</publishTime>
     </File>
     <File Include="Content/Cotizacion.pdf">
-      <publishTime>04/12/2018 19:21:16</publishTime>
+      <publishTime>04/15/2018 19:39:44</publishTime>
     </File>
     <File Include="Content/PagedList.css">
       <publishTime>10/18/2017 21:46:42</publishTime>
@@ -465,6 +465,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Clientes/Index.cshtml">
       <publishTime>12/20/2017 23:52:51</publishTime>
     </File>
+    <File Include="Views/Cotizacion/Consolidado.cshtml">
+      <publishTime>04/14/2018 21:21:55</publishTime>
+    </File>
+    <File Include="Views/Cotizacion/ConsolidadoFac.cshtml">
+      <publishTime>04/14/2018 21:22:51</publishTime>
+    </File>
     <File Include="Views/Cotizacion/CotDelete.cshtml">
       <publishTime>01/23/2018 13:52:19</publishTime>
     </File>
@@ -484,7 +490,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/11/2018 21:01:10</publishTime>
     </File>
     <File Include="Views/Cotizacion/Index.cshtml">
-      <publishTime>03/08/2018 13:17:01</publishTime>
+      <publishTime>04/14/2018 19:39:33</publishTime>
     </File>
     <File Include="Views/Cotizacion/ProDelete.cshtml">
       <publishTime>01/23/2018 13:52:19</publishTime>
@@ -505,7 +511,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/11/2018 18:43:39</publishTime>
     </File>
     <File Include="Views/Factura/Index.cshtml">
-      <publishTime>03/11/2018 18:42:15</publishTime>
+      <publishTime>04/15/2018 17:09:39</publishTime>
     </File>
     <File Include="Views/Factura/Pago.cshtml">
       <publishTime>03/08/2018 13:17:01</publishTime>
@@ -538,7 +544,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/05/2017 20:14:17</publishTime>
     </File>
     <File Include="Views/Producto/Create.cshtml">
-      <publishTime>03/17/2018 09:46:28</publishTime>
+      <publishTime>04/14/2018 14:07:14</publishTime>
     </File>
     <File Include="Views/Producto/Delete.cshtml">
       <publishTime>10/30/2017 21:15:00</publishTime>
@@ -547,7 +553,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/30/2017 20:09:06</publishTime>
     </File>
     <File Include="Views/Producto/Edit.cshtml">
-      <publishTime>03/17/2018 09:49:40</publishTime>
+      <publishTime>04/14/2018 14:07:28</publishTime>
     </File>
     <File Include="Views/Producto/Index.cshtml">
       <publishTime>03/17/2018 09:48:03</publishTime>
@@ -571,7 +577,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/05/2017 20:14:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/12/2018 21:30:28</publishTime>
+      <publishTime>04/15/2018 20:37:29</publishTime>
     </File>
   </ItemGroup>
 </Project>

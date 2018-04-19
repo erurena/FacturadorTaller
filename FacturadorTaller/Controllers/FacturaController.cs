@@ -147,15 +147,35 @@ namespace FacturadorTaller.Controllers
             var VM = new PagoViewModel();
             VM.Factura = DB.Factura.Include(f => f.Cotizacion)
                 .FirstOrDefault(f => f.FacturaId == id);
-            VM.PagoFac = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
-            VM.Balance = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+            if (VM.Factura.Consolidado != "S")
+            {
+                VM.PagoFac = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+                VM.Balance = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+            }
+            else
+            {
+                VM.PagoFac = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.TotalFactura + c.Itbis);
+                VM.Balance = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.TotalFactura + c.Itbis);
+            }
+            
             VM.Pago = DB.Pago.FirstOrDefault(f => f.FacturaId == id);
             if (VM.Pago != null)
             {
                 VM.SumPago = DB.Pago
                           .Where(p => p.FacturaId == id)
                           .Sum(p => p.MontoPago);
-                VM.Balance = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis - VM.SumPago;
+                if (VM.Factura.Consolidado != "S")
+                {
+                    VM.Balance = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis - VM.SumPago;
+                }
+                else
+                {
+                    var sumaBal = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                                 .Sum(c => c.TotalFactura + c.Itbis);
+                    VM.Balance = sumaBal - VM.SumPago;
+                }
                 VM.PagoFac = VM.Balance;
             }
             return View(VM);
@@ -198,11 +218,24 @@ namespace FacturadorTaller.Controllers
 
                     Factura facm = DB.Factura.Include(f => f.Cotizacion)
                                  .FirstOrDefault(f => f.FacturaId == file.FacturaId);
-                    if (facm.Cotizacion.TotalFactura + facm.Cotizacion.Itbis == sumPago)
+                    if (facm.Consolidado != "S")
                     {
-                        facm.PagoStatus = "S";
+                        if (facm.Cotizacion.TotalFactura + facm.Cotizacion.Itbis == sumPago)
+                        {
+                            facm.PagoStatus = "S";
+                        }
+                        decimal balance = facm.Cotizacion.TotalFactura + facm.Cotizacion.Itbis - sumPago;
                     }
-                    decimal balance = facm.Cotizacion.TotalFactura + facm.Cotizacion.Itbis - sumPago;
+                    else
+                    {
+                        var fac = DB.Cotizacion.Where(c => c.ConsolidadoId == facm.Cotizacion.ConsolidadoId)
+                                 .Sum(c => c.TotalFactura + c.Itbis);
+                        if (fac == sumPago)
+                        {
+                            facm.PagoStatus = "S";
+                        }
+                        decimal balance = fac - sumPago;
+                    }
                     DB.SaveChanges();
 
 
@@ -224,10 +257,38 @@ namespace FacturadorTaller.Controllers
             var VM = new FacturaViewModel();
             VM.Factura = DB.Factura.Include(f => f.Cotizacion)
                          .FirstOrDefault(c => c.FacturaId == id);
-            VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
+            if (VM.Factura.Consolidado != "S")
+            { VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
                 .Where(c => c.CotizacionId == cotId)
                 .OrderByDescending(c => c.CotizacionId);
-            var totalFac = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+                VM.TotalFacb = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+                VM.TotalFac = VM.Factura.Cotizacion.TotalFactura;
+                VM.TotalItbis = VM.Factura.Cotizacion.Itbis;
+            }
+            else
+            {
+                VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
+                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                .OrderByDescending(c => c.CotizacionId);
+                VM.TotalFacb = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.TotalFactura + c.Itbis);
+                VM.TotalFac = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.TotalFactura);
+                VM.TotalItbis = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.Itbis);
+            }
+            foreach (var v in VM.DetalleCot)
+            {
+                if (v.Comentario != null)
+                {
+                    VM.cont = 1;
+
+                }
+                else
+                {
+                    VM.cont = 0;
+                }
+            }
             var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
             if (file.Exists)
             {
@@ -283,20 +344,25 @@ namespace FacturadorTaller.Controllers
             table1.AddCell("Fecha: " + VM.Factura.FechaFac.ToShortDateString());
             table1.AddCell(VM.Factura.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("RNC " + VM.Factura.Cotizacion.Clientes.RncCliente);
+            table1.AddCell("Orden Compra " + VM.Factura.OrdenCompraNu);
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(5);
+            table1 = new PdfPTable(4 + VM.cont);
             table1.WidthPercentage = 100;
-            table1.SetWidths(new int[] { 1, 1, 2, 1, 1 });
+            if (VM.cont != 0)
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            else
+            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
 
             table1.AddCell("Cantidad");
             table1.AddCell("Ficha");
-            table1.AddCell("Descripcion");
-            table1.AddCell("Comentario");
+            table1.AddCell("Tipo Trabajo");
+            if (VM.cont != 0)
+            { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
 
             foreach (var detalle in VM.DetalleCot)
@@ -304,9 +370,14 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
-                table1.AddCell(detalle.Comentario);
+                if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
                 table1.AddCell(detalle.Valor.ToString("N0"));
             }
+            table1.AddCell("");
+            table1.AddCell("");
+            table1.AddCell(VM.Factura.Cotizacion.Nota);
+            table1.AddCell("");
+            table1.AddCell("");
 
             doc.Add(table1);
 
@@ -318,7 +389,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.Factura.Cotizacion.TotalFactura.ToString("C0"));
+            table1.AddCell("Total RD: " + VM.TotalFac.ToString("C0"));
 
             doc.Add(table1);
 
@@ -330,7 +401,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.Factura.Cotizacion.Itbis.ToString("C0"));
+            table1.AddCell("18% Itbis: " + VM.TotalItbis.ToString("C0"));
 
             doc.Add(table1);
 
@@ -341,7 +412,7 @@ namespace FacturadorTaller.Controllers
 
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total General RD: " + totalFac.ToString("C0"));
+            table1.AddCell("Total General RD: " + VM.TotalFacb.ToString("C0"));
 
             doc.Add(table1);
 
@@ -391,10 +462,39 @@ namespace FacturadorTaller.Controllers
             var VM = new FacturaViewModel();
             VM.Factura = DB.Factura.Include(f => f.Cotizacion)
                          .FirstOrDefault(c => c.FacturaId == fac.Factura.FacturaId);
-            VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == fac.Factura.Cotizacion.CotizacionId)
+            if (VM.Factura.Consolidado != "S")
+            {
+                VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
+                  .Where(c => c.CotizacionId == fac.Factura.CotizacionId)
+                  .OrderByDescending(c => c.CotizacionId);
+                VM.TotalFacb = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+                VM.TotalFac = VM.Factura.Cotizacion.TotalFactura;
+                VM.TotalItbis = VM.Factura.Cotizacion.Itbis;
+            }
+            else
+            {
+                VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
+                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
                 .OrderByDescending(c => c.CotizacionId);
-            var totalFac = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
+                VM.TotalFacb = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.TotalFactura + c.Itbis);
+                VM.TotalFac = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.TotalFactura);
+                VM.TotalItbis = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                    .Sum(c => c.Itbis);
+            }
+            foreach (var v in VM.DetalleCot)
+            {
+                if (v.Comentario != null)
+                {
+                    VM.cont = 1;
+
+                }
+                else
+                {
+                    VM.cont = 0;
+                }
+            }
             var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
             var file = new FileInfo(Server.MapPath("/Content/Factura.pdf"));
             if (file.Exists)
@@ -402,7 +502,7 @@ namespace FacturadorTaller.Controllers
                 file.Delete();
             }
             Document doc = new Document(PageSize.LETTER);
-            var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
+            var output = new FileStream(Server.MapPath("/Content/Factura.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
 
             doc.Open();
@@ -454,17 +554,21 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(5);
+            table1 = new PdfPTable(4 + VM.cont);
             table1.WidthPercentage = 100;
-            table1.SetWidths(new int[] { 1, 1, 2, 1, 1 });
+            if (VM.cont != 0)
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            else
+            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
 
             table1.AddCell("Cantidad");
             table1.AddCell("Ficha");
-            table1.AddCell("Descripcion");
-            table1.AddCell("Comentario");
+            table1.AddCell("Tipo Trabajo");
+            if (VM.cont != 0)
+            { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
 
             foreach (var detalle in VM.DetalleCot)
@@ -472,9 +576,14 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
-                table1.AddCell(detalle.Comentario);
-                table1.AddCell(detalle.Valor.ToString("N0"));
+                if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
+                table1.AddCell(detalle.Valor.ToString("N0") );
             }
+            table1.AddCell("");
+            table1.AddCell("");
+            table1.AddCell(VM.Factura.Cotizacion.Nota);
+            table1.AddCell("");
+            table1.AddCell("");
 
             doc.Add(table1);
 
@@ -486,7 +595,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.Factura.Cotizacion.TotalFactura.ToString("C0"));
+            table1.AddCell("Total RD: " + VM.TotalFac.ToString("C0"));
 
             doc.Add(table1);
 
@@ -498,7 +607,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.Factura.Cotizacion.Itbis.ToString("C0"));
+            table1.AddCell("18% Itbis: " + VM.TotalItbis.ToString("C0"));
 
             doc.Add(table1);
 
@@ -509,7 +618,7 @@ namespace FacturadorTaller.Controllers
 
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total General RD: " + totalFac.ToString("C0"));
+            table1.AddCell("Total General RD: " + VM.TotalFacb.ToString("C0"));
 
             doc.Add(table1);
 

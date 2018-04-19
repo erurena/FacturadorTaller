@@ -23,6 +23,8 @@ namespace FacturadorTaller.ViewModel
 
         public Pago Pago { get; set; }
 
+        public Cotizacion Cotizacion { get; set; }
+
         public DateTime GetDate()
         {
             return DateTime.Parse(string.Format(Fecha));

@@ -23,6 +23,8 @@ namespace FacturadorTaller.Models
 
         public string PagoStatus { get; set; }
 
+        public string Consolidado { get; set; }
+
         [Required]
         public string OrdenCompraNu { get; set; }
 

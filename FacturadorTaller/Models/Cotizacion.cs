@@ -32,6 +32,8 @@ namespace FacturadorTaller.Models
 
         public string Nota { get; set; }
 
+        public string ConsolidadoId { get; set; }
+
         public virtual Clientes Clientes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -343,6 +343,18 @@ namespace FacturadorTaller.Controllers
             VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
                 .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
+            foreach (var v in VM.DetalleCot)
+            {
+                if (v.Comentario != null)
+                {
+                    VM.cont = 1;
+
+                }
+                else
+                {
+                    VM.cont = 0;
+                }
+            }
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
             var body = "<p>Cliente: {0} </p> </p><p>{1}</p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
             var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
@@ -391,17 +403,22 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(5);
+
+            table1 = new PdfPTable(4 + VM.cont);
             table1.WidthPercentage = 100;
-            table1.SetWidths(new int[] {1,1,2,1,1 });
+            if (VM.cont != 0)
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            else
+            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
 
             table1.AddCell("Cantidad");
             table1.AddCell("Ficha");
-            table1.AddCell("Descripcion");
-            table1.AddCell("Comentario");
+            table1.AddCell("Tipo Trabajo");
+            if (VM.cont != 0)
+            { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
 
             foreach (var detalle in VM.DetalleCot)
@@ -409,8 +426,8 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
-                table1.AddCell(detalle.Comentario);
-                table1.AddCell(detalle.Valor.ToString("C"));
+                if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
+                table1.AddCell(detalle.Valor.ToString("N0"));
             }
             table1.AddCell("");
             table1.AddCell("");
@@ -491,6 +508,18 @@ namespace FacturadorTaller.Controllers
             VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
                 .Where(c => c.CotizacionId == id && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
+            foreach(var v in VM.DetalleCot)
+            {
+                if (v.Comentario != null)
+                {
+                    VM.cont = 1;
+                    
+                }
+                else
+                {
+                    VM.cont = 0;
+                }
+            }
             var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
             var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
             if (file.Exists)
@@ -538,17 +567,21 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(5);
+            table1 = new PdfPTable(4 + VM.cont);
             table1.WidthPercentage = 100;
-            table1.SetWidths(new int[] { 1, 1, 2, 1, 1 });
+            if (VM.cont != 0)
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            else
+            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
 
             table1.AddCell("Cantidad");
             table1.AddCell("Ficha");
-            table1.AddCell("Descripcion");
-            table1.AddCell("Comentario");
+            table1.AddCell("Tipo Trabajo");
+            if (VM.cont != 0)
+            { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
 
             foreach (var detalle in VM.DetalleCot)
@@ -556,7 +589,7 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
-                table1.AddCell(detalle.Comentario);
+                if (VM.cont !=0) { table1.AddCell(detalle.Comentario); }
                 table1.AddCell(detalle.Valor.ToString("N0"));
             }
 
@@ -706,6 +739,17 @@ namespace FacturadorTaller.Controllers
                     detalleCot.Valor = valor;
                     detalleCot.Comentario = comen;
                     DB.SaveChanges();
+
+                    Decimal monto = DB.DetalleCot
+                                    .Where(d => d.CotizacionId == detalleCot.CotizacionId)
+                                    .Sum(m => m.Cantidad * m.Valor);
+                    Decimal itbis = monto * 0.18m;
+
+                    Cotizacion cotm = DB.Cotizacion.Find(detalleCot.CotizacionId);
+                    cotm.TotalFactura = monto;
+                    cotm.Itbis = itbis;
+                    DB.SaveChanges();
+
                     return RedirectToAction("ProductoFac", new { cotId = detalleCot.CotizacionId });
                 }
             }
@@ -766,6 +810,27 @@ namespace FacturadorTaller.Controllers
                     var ordenCompra = mod.Factura.OrdenCompraNu;
 
                     Cotizacion cotm = DB.Cotizacion.Find(cotId);
+                    if (cotm.ConsolidadoId != null)
+                    {
+                       IEnumerable<Cotizacion> cot= DB.Cotizacion.Where(c => c.ConsolidadoId == cotm.ConsolidadoId);
+                       foreach(var c in cot)
+                        {
+                            c.FacturaEst = "S";
+                            DB.Entry(c).State = EntityState.Modified;
+                        }
+                        DB.SaveChanges();
+                        Factura filec = new Factura();
+
+                        filec.CotizacionId = cotId;
+                        filec.FechaFac = fechaFac;
+                        filec.FechaVen = fechaVen;
+                        filec.Ncf = ncf;
+                        filec.Consolidado = "S";
+                        filec.OrdenCompraNu = ordenCompra;
+                        DB.Factura.Add(filec);
+                        DB.SaveChanges();
+                        return RedirectToAction("Pdf", "Factura", new { id = filec.FacturaId, cotId = filec.CotizacionId });
+                    }
                     cotm.FacturaEst = "S";
                     DB.SaveChanges();
 
@@ -789,6 +854,29 @@ namespace FacturadorTaller.Controllers
             return View(mod);
         }
 
+        [Authorize(Roles = "Admin, Usuario")]
+        public ActionResult ConsolidadoFac(int id)
+        {
+           IEnumerable<Cotizacion> cot = DB.Cotizacion.Where(c => c.ClienteId == id && c.FacturaEst != "S");
+            return View(cot);
+        }
+
+        [Authorize(Roles = "Admin, Usuario")]
+        public ActionResult Consolidado(int id)
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin, Usuario")]
+        [HttpPost]
+        public ActionResult Consolidado(int id, Cotizacion conso)
+        {
+            var ind = conso.ConsolidadoId;
+            Cotizacion cot = DB.Cotizacion.FirstOrDefault(c => c.CotizacionId == id && c.FacturaEst != "S");
+            cot.ConsolidadoId = ind;
+            DB.SaveChanges();
+            return RedirectToAction("ConsolidadoFac", new { id = cot.ClienteId});
+        }
 
         public JsonResult GetClientes()
         {

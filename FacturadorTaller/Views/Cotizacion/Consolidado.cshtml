@@ -1,0 +1,27 @@
+﻿@model FacturadorTaller.Models.Cotizacion
+@{
+    ViewBag.Title = "Consolidar";
+}
+
+<h2>Consolidacion</h2>
+
+@using (Html.BeginForm("Consolidado", "Cotizacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+   
+<div class="form-group">
+    @Html.LabelFor(model => model.ConsolidadoId)
+    @Html.TextBoxFor(model => model.ConsolidadoId)
+    @Html.ValidationMessageFor(model => model.ConsolidadoId, "", new { @class = "text-danger" })
+</div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Modificar" class="btn btn-primary btn-lg" />
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Volver a lista", "Index")
+</div>

@@ -20,6 +20,7 @@ namespace FacturadorTaller.ViewModel
 
         public Factura Factura { get; set; }
 
+
         public DateTime GetDateF()
         {
             return DateTime.Parse(string.Format(FechaFac));

@@ -24,7 +24,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Categoria)
         @Html.RadioButtonFor(model => model.Categoria, "Servicio", new { @checked = true }) Servicio
-        @Html.RadioButtonFor(model => model.Categoria, "Producto") Produto
+        @Html.RadioButtonFor(model => model.Categoria, "Producto") Producto
         @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
     </div>
 

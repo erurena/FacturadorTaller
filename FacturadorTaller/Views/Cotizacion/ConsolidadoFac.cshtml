@@ -1,0 +1,39 @@
+﻿@model IEnumerable<FacturadorTaller.Models.Cotizacion>
+
+@{
+    /**/
+
+    ViewBag.Title = "Consolidado Factura";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Cotizacion ID
+        </th>
+        <th>
+            Consolidada ID
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelitem => item.CotizacionId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.ConsolidadoId)
+        </td>
+        <td>
+            @Html.ActionLink("Consolidar", "Consolidado", new { id = item.CotizacionId })
+        </td>
+    </tr>
+    }
+
+</table>
+
+<div>
+    @Html.ActionLink("Volver a lista", "Index")
+</div>
+
