@@ -56,10 +56,13 @@
 <table class="table">
     <tr>
         <th>
-            PRODUCTO
+            CANTIDAD
         </th>
         <th>
-            CANTIDAD
+            TIPO TRABAJO
+        </th>
+        <th>
+            FICHA
         </th>
         <th>
             PRECIO
@@ -68,17 +71,20 @@
 
     @foreach (var item in Model.DetalleCot)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelitem => item.Cantidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelitem => item.Producto.NombreProducto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelitem => item.Valor)
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelitem => item.Cantidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.Producto.NombreProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.FichaVehiculo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.Valor)
+        </td>
+    </tr>
     }
 
 

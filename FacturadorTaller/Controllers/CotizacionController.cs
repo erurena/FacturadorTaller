@@ -790,12 +790,12 @@ namespace FacturadorTaller.Controllers
                     if (ncf == "S")
                     {
                         var ncfMo = DB.Ncf.Where(n => n.Estatus == null).FirstOrDefault();
-                        var ncfAct = (ncfMo.NumInicio - ncfMo.NumFin + ncfMo.Contador) + ncfMo.NumFin;
-                        var ncfCont = ncfAct - ncfMo.NumFin + ncfMo.NumFin;
+                        var ncfAct = (ncfMo.NumInicio  + ncfMo.Contador);
+                        var ncfCont = ncfMo.Contador + 1;
                         var ncfReleg = ncfAct.ToString().Length;
                         var ncfCero = new string ('0', (8 - ncfReleg));
                         ncf = string.Concat(ncfMo.Inicio + ncfCero +  ncfAct);
-                        if (ncfCont == ncfMo.NumFin)
+                        if (ncfCont > ncfMo.NumFin)
                         {
                             ncfMo.Estatus = "C";
                         }

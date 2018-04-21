@@ -28,10 +28,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/02/2015 04:32:26</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.dll">
-      <publishTime>04/15/2018 20:37:26</publishTime>
+      <publishTime>04/21/2018 08:42:59</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.pdb">
-      <publishTime>04/15/2018 20:37:26</publishTime>
+      <publishTime>04/21/2018 08:42:59</publishTime>
     </File>
     <File Include="bin/HtmlSanitizationLibrary.dll">
       <publishTime>03/08/2018 13:17:03</publishTime>
@@ -163,7 +163,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/23/2018 13:52:16</publishTime>
     </File>
     <File Include="Content/Cotizacion.pdf">
-      <publishTime>04/15/2018 19:39:44</publishTime>
+      <publishTime>04/20/2018 23:40:04</publishTime>
     </File>
     <File Include="Content/PagedList.css">
       <publishTime>10/18/2017 21:46:42</publishTime>
@@ -412,7 +412,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/10/2018 20:13:34</publishTime>
     </File>
     <File Include="Views/Administracion/EditNcf.cshtml">
-      <publishTime>03/10/2018 20:13:44</publishTime>
+      <publishTime>04/21/2018 08:40:32</publishTime>
     </File>
     <File Include="Views/Administracion/EliminarRoles.cshtml">
       <publishTime>03/08/2018 13:17:00</publishTime>
@@ -481,7 +481,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/11/2018 22:38:08</publishTime>
     </File>
     <File Include="Views/Cotizacion/Details.cshtml">
-      <publishTime>03/10/2018 20:17:42</publishTime>
+      <publishTime>04/18/2018 20:20:01</publishTime>
     </File>
     <File Include="Views/Cotizacion/Edit.cshtml">
       <publishTime>04/11/2018 22:37:25</publishTime>
@@ -496,7 +496,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/23/2018 13:52:19</publishTime>
     </File>
     <File Include="Views/Cotizacion/ProductoFac.cshtml">
-      <publishTime>04/12/2018 21:24:31</publishTime>
+      <publishTime>04/18/2018 22:46:23</publishTime>
     </File>
     <File Include="Views/Cotizacion/ProEdit.cshtml">
       <publishTime>01/23/2018 13:52:19</publishTime>
@@ -577,7 +577,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/05/2017 20:14:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/15/2018 20:37:29</publishTime>
+      <publishTime>04/19/2018 20:55:34</publishTime>
     </File>
   </ItemGroup>
 </Project>

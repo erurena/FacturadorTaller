@@ -270,12 +270,14 @@ namespace FacturadorTaller.Controllers
                     var ini = mod.Inicio;
                     var numIni = mod.NumInicio;
                     var numFin = mod.NumFin;
+                    var est = mod.Estatus;
 
 
                     Ncf ncf = DB.Ncf.Find(id);
                     ncf.Inicio = ini;
                     ncf.NumInicio = numIni;
                     ncf.NumFin = numFin;
+                    ncf.Estatus = est;
                     DB.SaveChanges();
                     return RedirectToAction("IndexNcf");
                 }

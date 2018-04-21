@@ -16,6 +16,7 @@ using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Net.Mail;
+using iTextSharp.text.pdf.draw;
 
 namespace FacturadorTaller.Controllers
 {
