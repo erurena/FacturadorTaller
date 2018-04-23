@@ -260,7 +260,7 @@ namespace FacturadorTaller.Controllers
                          .FirstOrDefault(c => c.FacturaId == id);
             if (VM.Factura.Consolidado != "S")
             { VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == cotId)
+                .Where(c => c.CotizacionId == cotId && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
                 VM.TotalFacb = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
                 VM.TotalFac = VM.Factura.Cotizacion.TotalFactura;
@@ -269,7 +269,7 @@ namespace FacturadorTaller.Controllers
             else
             {
                 VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
                 VM.TotalFacb = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
                     .Sum(c => c.TotalFactura + c.Itbis);
@@ -466,7 +466,7 @@ namespace FacturadorTaller.Controllers
             if (VM.Factura.Consolidado != "S")
             {
                 VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                  .Where(c => c.CotizacionId == fac.Factura.CotizacionId)
+                  .Where(c => c.CotizacionId == fac.Factura.CotizacionId && c.Producto.Categoria == "Servicio")
                   .OrderByDescending(c => c.CotizacionId);
                 VM.TotalFacb = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
                 VM.TotalFac = VM.Factura.Cotizacion.TotalFactura;
@@ -475,7 +475,7 @@ namespace FacturadorTaller.Controllers
             else
             {
                 VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
+                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId && c.Producto.Categoria == "Servicio")
                 .OrderByDescending(c => c.CotizacionId);
                 VM.TotalFacb = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
                     .Sum(c => c.TotalFactura + c.Itbis);
@@ -631,7 +631,10 @@ namespace FacturadorTaller.Controllers
             doc.Close();
             doc.Dispose();
             MailMessage mail = new MailMessage();
-            mail.To.Add(new MailAddress(femail));
+            foreach (var to in femail.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                mail.To.Add(new MailAddress(to));
+            }
             mail.From = new MailAddress("emesolucionessrl@gmail.com");
             mail.Subject = "Factura EME Soluciones en General";
             string Body = string.Format(body, VM.Factura.Cotizacion.Clientes.NombreCliente);
