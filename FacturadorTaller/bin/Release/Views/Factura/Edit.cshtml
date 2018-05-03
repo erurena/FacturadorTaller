@@ -23,12 +23,12 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.FechaFac)
-        @Html.TextBoxFor(model => model.FechaFac, new { @class = "form-control", @Value = DateTime.Now.ToString("dd/MM/yyyy") })
+        @Html.TextBoxFor(model => model.FechaFac, new { @class = "form-control"})
         @Html.ValidationMessageFor(model => model.FechaFac, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.FechaVen)
-        @Html.TextBoxFor(model => model.FechaVen, new { @class = "form-control", @Value = DateTime.Now.ToString("dd/MM/yyyy") })
+        @Html.TextBoxFor(model => model.FechaVen, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FechaVen, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">

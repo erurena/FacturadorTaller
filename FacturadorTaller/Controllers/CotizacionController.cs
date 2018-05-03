@@ -395,21 +395,22 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
+            VM.Fecha = (VM.Cotizacion.Fecha).ToString("dd/MM/yyyy");
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: "+ VM.Cotizacion.Fecha.ToShortDateString());
+            table1.AddCell("Fecha: "+ VM.Fecha);
             table1.AddCell(VM.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("RNC "+VM.Cotizacion.Clientes.RncCliente);
 
             doc.Add(table1);
 
 
-            table1 = new PdfPTable(4 + VM.cont);
+            table1 = new PdfPTable(5 + VM.cont);
             table1.WidthPercentage = 100;
             if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
             else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
@@ -420,14 +421,17 @@ namespace FacturadorTaller.Controllers
             if (VM.cont != 0)
             { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
+            table1.AddCell("Total RD$");
 
             foreach (var detalle in VM.DetalleCot)
             {
+                decimal total = detalle.Cantidad * detalle.Valor;
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
                 table1.AddCell(detalle.Valor.ToString("N0"));
+                table1.AddCell(total.ToString("N0"));
             }
             table1.AddCell("");
             table1.AddCell("");
@@ -529,6 +533,8 @@ namespace FacturadorTaller.Controllers
             Document doc = new Document(PageSize.LETTER);
             var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
+            HeaderTable e = new HeaderTable();
+            writer.PageEvent = e;
 
             doc.Open();
 
@@ -559,20 +565,21 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
+            VM.Fecha = (VM.Cotizacion.Fecha).ToString("dd/MM/yyyy");
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: " + VM.Cotizacion.Fecha.ToShortDateString());
+            table1.AddCell("Fecha: " + VM.Fecha);
             table1.AddCell(VM.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("RNC " + VM.Cotizacion.Clientes.RncCliente);
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(4 + VM.cont);
+            table1 = new PdfPTable(5 + VM.cont);
             table1.WidthPercentage = 100;
             if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
             else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
@@ -583,14 +590,17 @@ namespace FacturadorTaller.Controllers
             if (VM.cont != 0)
             { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
+            table1.AddCell("Total RD$");
 
             foreach (var detalle in VM.DetalleCot)
             {
+                decimal total = detalle.Cantidad * detalle.Valor;
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont !=0) { table1.AddCell(detalle.Comentario); }
                 table1.AddCell(detalle.Valor.ToString("N0"));
+                table1.AddCell(total.ToString("N0"));
             }
 
             table1.AddCell("");
@@ -642,6 +652,31 @@ namespace FacturadorTaller.Controllers
             FileStream fs = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Open, FileAccess.Read);
 
             return File ( fs, "application/pdf");
+        }
+
+        public class HeaderTable: PdfPageEventHelper
+        {
+
+            protected PdfPTable table;
+            protected float tableHeight;
+
+            public HeaderTable()
+            {
+                PdfPTable table = new PdfPTable(4);
+                table.AddCell("Cantidad");
+                table.AddCell("Ficha");
+                table.AddCell("Tipo Trabajo");
+                table.AddCell("Detalle");
+                table.AddCell("Valor RD$");
+                table.AddCell("Total RD$");
+
+            }
+
+            public void OnEndPage(PdfWriter writer, Document doc)
+            {
+                  table.WriteSelectedRows(0, -1, doc.Left, doc.Top, writer.DirectContent);
+
+            }
         }
 
 

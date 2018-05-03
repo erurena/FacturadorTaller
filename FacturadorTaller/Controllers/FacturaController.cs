@@ -340,21 +340,22 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
+            string fecha = VM.Factura.FechaFac.ToString("dd/MM/yyyy");
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: " + VM.Factura.FechaFac.ToShortDateString());
+            table1.AddCell("Fecha: " + fecha);
             table1.AddCell(VM.Factura.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("RNC " + VM.Factura.Cotizacion.Clientes.RncCliente);
             table1.AddCell("Orden Compra " + VM.Factura.OrdenCompraNu);
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(4 + VM.cont);
+            table1 = new PdfPTable(5 + VM.cont);
             table1.WidthPercentage = 100;
             if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
             else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
@@ -365,14 +366,17 @@ namespace FacturadorTaller.Controllers
             if (VM.cont != 0)
             { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
+            table1.AddCell("Total RD$");
 
             foreach (var detalle in VM.DetalleCot)
             {
+                decimal total = detalle.Cantidad * detalle.Valor;
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(detalle.Valor.ToString("N0"));
+                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_LEFT });
+                table1.AddCell(total.ToString("N0"));
             }
             table1.AddCell("");
             table1.AddCell("");
@@ -418,7 +422,7 @@ namespace FacturadorTaller.Controllers
             doc.Add(table1);
 
             para = new Paragraph();
-            para.Add("______________________________ \nFirma Cliente");
+            para.Add("______________________________ \nFirma Suplidor");
             celda1.AddElement(para);
             doc.Add(para);
 
@@ -460,6 +464,7 @@ namespace FacturadorTaller.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             string femail = fac.Email;
+            string notaEmail = fac.Nota;
             var VM = new FacturaViewModel();
             VM.Factura = DB.Factura.Include(f => f.Cotizacion)
                          .FirstOrDefault(c => c.FacturaId == fac.Factura.FacturaId);
@@ -547,20 +552,22 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
+            string fecha = VM.Factura.FechaFac.ToString("dd/MM/yyyy");
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: " + VM.Factura.FechaFac.ToShortDateString());
+            table1.AddCell("Fecha: " + fecha);
             table1.AddCell(VM.Factura.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("RNC " + VM.Factura.Cotizacion.Clientes.RncCliente);
+            table1.AddCell("Orden Compra " + VM.Factura.OrdenCompraNu);
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(4 + VM.cont);
+            table1 = new PdfPTable(5 + VM.cont);
             table1.WidthPercentage = 100;
             if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
             else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
@@ -571,14 +578,17 @@ namespace FacturadorTaller.Controllers
             if (VM.cont != 0)
             { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
+            table1.AddCell("Total RD$");
 
             foreach (var detalle in VM.DetalleCot)
             {
+                decimal total = detalle.Cantidad * detalle.Valor;
                 table1.AddCell(detalle.Cantidad.ToString());
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
                 table1.AddCell(detalle.Valor.ToString("N0") );
+                table1.AddCell(total.ToString("N0"));
             }
             table1.AddCell("");
             table1.AddCell("");
@@ -624,7 +634,7 @@ namespace FacturadorTaller.Controllers
             doc.Add(table1);
 
             para = new Paragraph();
-            para.Add("______________________________ \nFirma Cliente");
+            para.Add("______________________________ \nFirma Suplidor");
             celda1.AddElement(para);
             doc.Add(para);
 
@@ -637,7 +647,7 @@ namespace FacturadorTaller.Controllers
             }
             mail.From = new MailAddress("emesolucionessrl@gmail.com");
             mail.Subject = "Factura EME Soluciones en General";
-            string Body = string.Format(body, VM.Factura.Cotizacion.Clientes.NombreCliente);
+            string Body = string.Format(body, VM.Factura.Cotizacion.Clientes.NombreCliente, notaEmail);
             mail.Body = Body;
             mail.Attachments.Add(new Attachment(Server.MapPath("/Content/Factura.pdf")));
             mail.IsBodyHtml = true;
