@@ -430,8 +430,8 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(detalle.Valor.ToString("N0"));
-                table1.AddCell(total.ToString("N0"));
+                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
             }
             table1.AddCell("");
             table1.AddCell("");
@@ -599,8 +599,8 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont !=0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(detalle.Valor.ToString("N0"));
-                table1.AddCell(total.ToString("N0"));
+                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
             }
 
             table1.AddCell("");

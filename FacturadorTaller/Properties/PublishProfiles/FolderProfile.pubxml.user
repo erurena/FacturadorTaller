@@ -28,10 +28,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/23/2018 13:18:12</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.dll">
-      <publishTime>05/02/2018 20:44:16</publishTime>
+      <publishTime>05/02/2018 22:41:16</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.pdb">
-      <publishTime>05/02/2018 20:44:16</publishTime>
+      <publishTime>05/02/2018 22:41:16</publishTime>
     </File>
     <File Include="bin/HtmlSanitizationLibrary.dll">
       <publishTime>04/23/2018 13:18:13</publishTime>
@@ -163,7 +163,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/23/2018 13:18:07</publishTime>
     </File>
     <File Include="Content/Cotizacion.pdf">
-      <publishTime>05/02/2018 14:20:16</publishTime>
+      <publishTime>05/02/2018 23:01:46</publishTime>
     </File>
     <File Include="Content/PagedList.css">
       <publishTime>04/23/2018 13:18:07</publishTime>
