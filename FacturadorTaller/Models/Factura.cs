@@ -25,6 +25,8 @@ namespace FacturadorTaller.Models
 
         public string Consolidado { get; set; }
 
+        public string FechaNcf { get; set; }
+
         [Required]
         public string OrdenCompraNu { get; set; }
 

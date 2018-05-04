@@ -230,6 +230,7 @@
     <Compile Include="ViewModel\DetalleCotViewModel.cs" />
     <Compile Include="ViewModel\EliminarRolViewModel.cs" />
     <Compile Include="ViewModel\FacturaViewModel.cs" />
+    <Compile Include="ViewModel\NcfViewModel.cs" />
     <Compile Include="ViewModel\PagoViewModel.cs" />
     <Compile Include="ViewModel\ReporteFacViewModel.cs" />
     <Compile Include="ViewModel\ReporteVentasViewModel.cs" />

@@ -208,20 +208,22 @@ namespace FacturadorTaller.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNcf(Ncf ncf)
+        public ActionResult CreateNcf(NcfViewModel ncf)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var ini = ncf.Inicio;
-                    var numIni = ncf.NumInicio;
-                    var numFin = ncf.NumFin;
+                    var ini = ncf.Ncf.Inicio;
+                    var numIni = ncf.Ncf.NumInicio;
+                    var numFin = ncf.Ncf.NumFin;
+                    var ncfFeha = ncf.GetDateF();
 
                     var file = new Ncf();
                     file.Inicio = ini;
                     file.NumInicio = numIni;
                     file.NumFin = numFin;
+                    file.NcfFecha = ncfFeha;
 
                     DB.Ncf.Add(file);
                     DB.SaveChanges();
@@ -246,8 +248,9 @@ namespace FacturadorTaller.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var ncf = new Ncf();
-            ncf = DB.Ncf.Find(id);
+            var ncf = new NcfViewModel();
+            ncf.Ncf = DB.Ncf.Find(id);
+            ncf.NcfFecha = ncf.Ncf.NcfFecha?.ToString("dd/MM/yyyy");
             if (ncf == null)
             {
                 return HttpNotFound();
@@ -257,7 +260,7 @@ namespace FacturadorTaller.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("EditNcf")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditNPost(int? id, Ncf mod)
+        public ActionResult EditNPost(int? id, NcfViewModel mod)
         {
             if (id == null)
             {
@@ -267,10 +270,11 @@ namespace FacturadorTaller.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var ini = mod.Inicio;
-                    var numIni = mod.NumInicio;
-                    var numFin = mod.NumFin;
-                    var est = mod.Estatus;
+                    var ini = mod.Ncf.Inicio;
+                    var numIni = mod.Ncf.NumInicio;
+                    var numFin = mod.Ncf.NumFin;
+                    var est = mod.Ncf.Estatus;
+                    var fec = mod.GetDateF();
 
 
                     Ncf ncf = DB.Ncf.Find(id);
@@ -278,6 +282,7 @@ namespace FacturadorTaller.Controllers
                     ncf.NumInicio = numIni;
                     ncf.NumFin = numFin;
                     ncf.Estatus = est;
+                    ncf.NcfFecha = fec;
                     DB.SaveChanges();
                     return RedirectToAction("IndexNcf");
                 }

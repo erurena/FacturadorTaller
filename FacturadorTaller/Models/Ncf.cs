@@ -22,5 +22,8 @@ namespace FacturadorTaller.Models
         public int NumActual { get; set; }
 
         public string Estatus { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? NcfFecha { get; set; }
     }
 }

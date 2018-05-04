@@ -340,6 +340,18 @@ namespace FacturadorTaller.Controllers
 
             doc.Add(table1);
 
+            table1 = new PdfPTable(3);
+            celda1 = new PdfPCell();
+            table1.WidthPercentage = 100;
+            table1.DefaultCell.Border = Rectangle.NO_BORDER;
+            table1.HorizontalAlignment = 0;
+
+            table1.AddCell(" ");
+            table1.AddCell("");
+            table1.AddCell("Valida Hasta: " + VM.Factura.FechaNcf);
+
+            doc.Add(table1);
+
             string fecha = VM.Factura.FechaFac.ToString("dd/MM/yyyy");
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
@@ -549,6 +561,18 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell("");
             table1.AddCell("NCF: " + VM.Factura.Ncf);
+
+            doc.Add(table1);
+
+            table1 = new PdfPTable(3);
+            celda1 = new PdfPCell();
+            table1.WidthPercentage = 100;
+            table1.DefaultCell.Border = Rectangle.NO_BORDER;
+            table1.HorizontalAlignment = 0;
+
+            table1.AddCell(" ");
+            table1.AddCell("");
+            table1.AddCell("Valida Hasta: " + VM.Factura.FechaNcf);
 
             doc.Add(table1);
 

@@ -1,4 +1,4 @@
-﻿@model FacturadorTaller.Models.Ncf
+﻿@model FacturadorTaller.ViewModel.NcfViewModel
 
 @{
     ViewBag.Title = "Editar Ncf";
@@ -12,24 +12,29 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.Inicio)
-        @Html.TextBoxFor(model => model.Inicio, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Inicio, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.Ncf.Inicio)
+        @Html.TextBoxFor(model => model.Ncf.Inicio, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Ncf.Inicio, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.NumInicio)
-        @Html.TextBoxFor(model => model.NumInicio, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NumInicio, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.Ncf.NumInicio)
+        @Html.TextBoxFor(model => model.Ncf.NumInicio, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Ncf.NumInicio, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.NumFin)
-        @Html.TextBoxFor(model => model.NumFin, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NumFin, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.Ncf.NumFin)
+        @Html.TextBoxFor(model => model.Ncf.NumFin, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Ncf.NumFin, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Estatus)
-        @Html.TextBoxFor(model => model.Estatus, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Estatus, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.NcfFecha)
+        @Html.TextBoxFor(model => model.NcfFecha, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.NcfFecha, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Ncf.Estatus)
+        @Html.TextBoxFor(model => model.Ncf.Estatus, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Ncf.Estatus, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">

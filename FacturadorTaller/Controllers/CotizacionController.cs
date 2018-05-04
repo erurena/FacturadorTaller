@@ -671,8 +671,8 @@ namespace FacturadorTaller.Controllers
                 table.AddCell("Total RD$");
 
             }
-
-            public void OnEndPage(PdfWriter writer, Document doc)
+            
+            public override void OnEndPage(PdfWriter writer, Document doc)
             {
                   table.WriteSelectedRows(0, -1, doc.Left, doc.Top, writer.DirectContent);
 
@@ -822,9 +822,11 @@ namespace FacturadorTaller.Controllers
                     var fechaFac = mod.GetDateF();
                     var fechaVen = mod.GetDateFv();
                     var ncf = mod.NcfInd;
+                    string fechancf;
                     if (ncf == "S")
                     {
                         var ncfMo = DB.Ncf.Where(n => n.Estatus == null).FirstOrDefault();
+                        fechancf = ncfMo.NcfFecha?.ToString("dd/MM/yyyy");
                         var ncfAct = (ncfMo.NumInicio  + ncfMo.Contador);
                         var ncfCont = ncfMo.Contador + 1;
                         var ncfReleg = ncfAct.ToString().Length;
@@ -841,6 +843,7 @@ namespace FacturadorTaller.Controllers
                     else
                     {
                         ncf = "";
+                        fechancf = "";
                     }
                     var ordenCompra = mod.Factura.OrdenCompraNu;
 
@@ -860,6 +863,7 @@ namespace FacturadorTaller.Controllers
                         filec.FechaFac = fechaFac;
                         filec.FechaVen = fechaVen;
                         filec.Ncf = ncf;
+                        filec.FechaNcf = fechancf;
                         filec.Consolidado = "S";
                         filec.OrdenCompraNu = ordenCompra;
                         DB.Factura.Add(filec);
@@ -875,6 +879,7 @@ namespace FacturadorTaller.Controllers
                     file.FechaFac = fechaFac;
                     file.FechaVen = fechaVen;
                     file.Ncf = ncf;
+                    file.FechaNcf = fechancf;
                     file.OrdenCompraNu = ordenCompra;
                     DB.Factura.Add(file);
                     DB.SaveChanges();
