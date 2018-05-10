@@ -533,8 +533,6 @@ namespace FacturadorTaller.Controllers
             Document doc = new Document(PageSize.LETTER);
             var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
-            HeaderTable e = new HeaderTable();
-            writer.PageEvent = e;
 
             doc.Open();
 
@@ -652,31 +650,6 @@ namespace FacturadorTaller.Controllers
             FileStream fs = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Open, FileAccess.Read);
 
             return File ( fs, "application/pdf");
-        }
-
-        public class HeaderTable: PdfPageEventHelper
-        {
-
-            protected PdfPTable table;
-            protected float tableHeight;
-
-            public HeaderTable()
-            {
-                PdfPTable table = new PdfPTable(4);
-                table.AddCell("Cantidad");
-                table.AddCell("Ficha");
-                table.AddCell("Tipo Trabajo");
-                table.AddCell("Detalle");
-                table.AddCell("Valor RD$");
-                table.AddCell("Total RD$");
-
-            }
-            
-            public override void OnEndPage(PdfWriter writer, Document doc)
-            {
-                  table.WriteSelectedRows(0, -1, doc.Left, doc.Top, writer.DirectContent);
-
-            }
         }
 
 

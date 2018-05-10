@@ -306,59 +306,49 @@ namespace FacturadorTaller.Controllers
             logo.ScaleAbsoluteWidth(70);
             doc.Add(logo);
 
-            Chunk chunk = new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 22, Font.BOLD, BaseColor.BLACK));
+            Chunk chunk = new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 20, Font.BOLD, BaseColor.BLACK));
             var parac = new Paragraph(chunk);
             parac.Alignment = Element.ALIGN_CENTER;
             Paragraph para = new Paragraph();
-            para.Add("REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL\nC/Felix Evariso Mejia, ·227," +
-                " Sector Villas Agricolas \nCel.: 829-350-3671  \nRNC: 131-33773-2");
+            para.Add("REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL\nC/Felix Evaristo Mejia, ·227," +
+                " Sector Villas Agricolas \nCel.: 829-350-3671");
             para.Alignment = Element.ALIGN_CENTER;
             doc.Add(parac);
             doc.Add(para);
 
-            PdfPTable table1 = new PdfPTable(3);
+
+
+            PdfPTable table1 = new PdfPTable(2);
             PdfPCell celda1 = new PdfPCell();
             table1.WidthPercentage = 100;
+            table1.SetWidths(new int[] { 2,1 });
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
             table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Factura: " + VM.Factura.FacturaId.ToString());
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(3);
-            celda1 = new PdfPCell();
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("NCF: " + VM.Factura.Ncf);
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(3);
-            celda1 = new PdfPCell();
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Valida Hasta: " + VM.Factura.FechaNcf);
-
-            doc.Add(table1);
+            table1.SpacingBefore = 20f;
+            table1.SpacingAfter = 30f;
 
             string fecha = VM.Factura.FechaFac.ToString("dd/MM/yyyy");
+            Phrase phrase = new Phrase();
+            phrase.Add(new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD)));
+            table1.AddCell(phrase);
+            table1.AddCell("NCF: " + VM.Factura.Ncf);
+            table1.AddCell("RNC: 131 - 33773 - 2");
+            table1.AddCell("Válida Hasta: " + VM.Factura.FechaNcf);
+            table1.AddCell("Fecha : " + fecha);
+            table1.AddCell("");
+            table1.AddCell("Factura: " + VM.Factura.FacturaId.ToString());
+            table1.AddCell("");
+
+            doc.Add(table1);
+
+           
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: " + fecha);
-            table1.AddCell(VM.Factura.Cotizacion.Clientes.NombreCliente);
-            table1.AddCell("RNC " + VM.Factura.Cotizacion.Clientes.RncCliente);
-            table1.AddCell("Orden Compra " + VM.Factura.OrdenCompraNu);
+            table1.WidthPercentage = 100;
+            table1.AddCell("Cliente: "+VM.Factura.Cotizacion.Clientes.NombreCliente);
+            table1.AddCell("RNC: " + VM.Factura.Cotizacion.Clientes.RncCliente);
+            table1.AddCell("Orden de Compra: " + VM.Factura.OrdenCompraNu);
+
 
             doc.Add(table1);
 
@@ -530,62 +520,51 @@ namespace FacturadorTaller.Controllers
             logo.ScaleAbsoluteWidth(70);
             doc.Add(logo);
 
-            Chunk chunk = new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 22, Font.BOLD, BaseColor.BLACK));
+            Chunk chunk = new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 20, Font.BOLD, BaseColor.BLACK));
             var parac = new Paragraph(chunk);
             parac.Alignment = Element.ALIGN_CENTER;
             Paragraph para = new Paragraph();
-            para.Add("REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL\nC/Felix Evariso Mejia, ·227," +
-                " Sector Villas Agricolas \nCel.: 829-350-3671  \nRNC: 131-33773-2");
+            para.Add("REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL\nC/Felix Evaristo Mejia, ·227," +
+                " Sector Villas Agricolas \nCel.: 829-350-3671");
             para.Alignment = Element.ALIGN_CENTER;
             doc.Add(parac);
             doc.Add(para);
 
-            PdfPTable table1 = new PdfPTable(3);
+
+
+            PdfPTable table1 = new PdfPTable(2);
             PdfPCell celda1 = new PdfPCell();
             table1.WidthPercentage = 100;
+            table1.SetWidths(new int[] { 2, 1 });
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
             table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Factura: " + VM.Factura.FacturaId.ToString());
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(3);
-            celda1 = new PdfPCell();
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("NCF: " + VM.Factura.Ncf);
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(3);
-            celda1 = new PdfPCell();
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Valida Hasta: " + VM.Factura.FechaNcf);
-
-            doc.Add(table1);
+            table1.SpacingBefore = 20f;
+            table1.SpacingAfter = 30f;
 
             string fecha = VM.Factura.FechaFac.ToString("dd/MM/yyyy");
-            table1 = new PdfPTable(1);
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: " + fecha);
-            table1.AddCell(VM.Factura.Cotizacion.Clientes.NombreCliente);
-            table1.AddCell("RNC " + VM.Factura.Cotizacion.Clientes.RncCliente);
-            table1.AddCell("Orden Compra " + VM.Factura.OrdenCompraNu);
+            Phrase phrase = new Phrase();
+            phrase.Add(new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD)));
+            table1.AddCell(phrase);
+            table1.AddCell("NCF: " + VM.Factura.Ncf);
+            table1.AddCell("RNC: 131 - 33773 - 2");
+            table1.AddCell("Válida Hasta: " + VM.Factura.FechaNcf);
+            table1.AddCell("Fecha : " + fecha);
+            table1.AddCell("");
+            table1.AddCell("Factura: " + VM.Factura.FacturaId.ToString());
+            table1.AddCell("");
 
             doc.Add(table1);
 
+
+            table1 = new PdfPTable(1);
+            table1.DefaultCell.Border = Rectangle.NO_BORDER;
+            table1.WidthPercentage = 100;
+            table1.AddCell("Cliente: " + VM.Factura.Cotizacion.Clientes.NombreCliente);
+            table1.AddCell("RNC: " + VM.Factura.Cotizacion.Clientes.RncCliente);
+            table1.AddCell("Orden de Compra: " + VM.Factura.OrdenCompraNu);
+
+
+            doc.Add(table1);
             table1 = new PdfPTable(5 + VM.cont);
             table1.WidthPercentage = 100;
             if (VM.cont != 0)
