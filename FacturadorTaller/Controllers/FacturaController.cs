@@ -251,9 +251,16 @@ namespace FacturadorTaller.Controllers
             }
             return View(pag);
         }
-
         [Authorize(Roles = "Admin, Usuario")]
         public FileStreamResult Pdf(int? id, int cotId)
+        {
+            PdfGen(id, cotId);
+            FileStream fs = new FileStream(Server.MapPath("/Content/Factura.pdf"), FileMode.Open, FileAccess.Read);
+
+            return File(fs, "application/pdf");
+        }
+
+        public void PdfGen(int? id, int cotId)
         {
             var VM = new FacturaViewModel();
             VM.Factura = DB.Factura.Include(f => f.Cotizacion)
@@ -290,13 +297,13 @@ namespace FacturadorTaller.Controllers
                     VM.cont = 0;
                 }
             }
-            var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
+            var file = new FileInfo(Server.MapPath("/Content/Factura.pdf"));
             if (file.Exists)
             {
                 file.Delete();
             }
             Document doc = new Document(PageSize.LETTER, 35, 35, 120, 35);
-            var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
+            var output = new FileStream(Server.MapPath("/Content/Factura.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             writer.PageEvent = new PageEventHelper();
 
@@ -416,9 +423,6 @@ namespace FacturadorTaller.Controllers
             doc.Close();
             doc.Dispose();
 
-            FileStream fs = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Open, FileAccess.Read);
-
-            return File(fs, "application/pdf");
         }
         // Email Factura
         [Authorize(Roles = "Admin, Usuario")]
@@ -452,168 +456,14 @@ namespace FacturadorTaller.Controllers
             }
             string femail = fac.Email;
             string notaEmail = fac.Nota;
+            int Id = fac.Factura.FacturaId;
+            int cotId = fac.Factura.CotizacionId;
             var VM = new FacturaViewModel();
             VM.Factura = DB.Factura.Include(f => f.Cotizacion)
                          .FirstOrDefault(c => c.FacturaId == fac.Factura.FacturaId);
-            if (VM.Factura.Consolidado != "S")
-            {
-                VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                  .Where(c => c.CotizacionId == fac.Factura.CotizacionId && c.Producto.Categoria == "Servicio")
-                  .OrderByDescending(c => c.CotizacionId);
-                VM.TotalFacb = VM.Factura.Cotizacion.TotalFactura + VM.Factura.Cotizacion.Itbis;
-                VM.TotalFac = VM.Factura.Cotizacion.TotalFactura;
-                VM.TotalItbis = VM.Factura.Cotizacion.Itbis;
-            }
-            else
-            {
-                VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.Cotizacion.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId && c.Producto.Categoria == "Servicio")
-                .OrderByDescending(c => c.CotizacionId);
-                VM.TotalFacb = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
-                    .Sum(c => c.TotalFactura + c.Itbis);
-                VM.TotalFac = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
-                    .Sum(c => c.TotalFactura);
-                VM.TotalItbis = DB.Cotizacion.Where(c => c.ConsolidadoId == VM.Factura.Cotizacion.ConsolidadoId)
-                    .Sum(c => c.Itbis);
-            }
-            foreach (var v in VM.DetalleCot)
-            {
-                if (v.Comentario != null)
-                {
-                    VM.cont = 1;
+            PdfGen(Id,cotId);
+            var body = "<p>Cliente: {0} </p> </p><p>{1}</p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
 
-                }
-                else
-                {
-                    VM.cont = 0;
-                }
-            }
-            var body = "<p>Cliente: {0} </p> </p><p> </p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
-            var file = new FileInfo(Server.MapPath("/Content/Factura.pdf"));
-            if (file.Exists)
-            {
-                file.Delete();
-            }
-            Document doc = new Document(PageSize.LETTER, 35, 35, 120, 35);
-            var output = new FileStream(Server.MapPath("/Content/Factura.pdf"), FileMode.Create);
-            var writer = PdfWriter.GetInstance(doc, output);
-            writer.PageEvent = new PageEventHelper();
-
-            doc.Open();
-
-
-
-            PdfPTable table1 = new PdfPTable(2);
-            PdfPCell celda1 = new PdfPCell();
-            table1.WidthPercentage = 100;
-            table1.SetWidths(new int[] { 2, 1 });
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-            table1.SpacingBefore = 20f;
-            table1.SpacingAfter = 30f;
-
-            string fecha = VM.Factura.FechaFac.ToString("dd/MM/yyyy");
-            Phrase phrase = new Phrase();
-            phrase.Add(new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD)));
-            table1.AddCell(phrase);
-            table1.AddCell("NCF: " + VM.Factura.Ncf);
-            table1.AddCell("RNC: 131 - 33773 - 2");
-            table1.AddCell("Válida Hasta: " + VM.Factura.FechaNcf);
-            table1.AddCell("Fecha : " + fecha);
-            table1.AddCell("");
-            table1.AddCell("Factura: " + VM.Factura.FacturaId.ToString());
-            table1.AddCell("");
-
-            doc.Add(table1);
-
-
-            table1 = new PdfPTable(1);
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.WidthPercentage = 100;
-            table1.AddCell("Cliente: " + VM.Factura.Cotizacion.Clientes.NombreCliente);
-            table1.AddCell("RNC: " + VM.Factura.Cotizacion.Clientes.RncCliente);
-            table1.AddCell("Orden de Compra: " + VM.Factura.OrdenCompraNu);
-
-
-            doc.Add(table1);
-            table1 = new PdfPTable(5 + VM.cont);
-            table1.WidthPercentage = 100;
-            if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
-            else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
-            table1.HorizontalAlignment = 0;
-            table1.SpacingBefore = 20f;
-            table1.SpacingAfter = 30f;
-
-            table1.AddCell("Cantidad");
-            table1.AddCell("Ficha");
-            table1.AddCell("Tipo Trabajo");
-            if (VM.cont != 0)
-            { table1.AddCell("Detalle"); }
-            table1.AddCell("Valor RD$");
-            table1.AddCell("Total RD$");
-
-            foreach (var detalle in VM.DetalleCot)
-            {
-                decimal total = detalle.Cantidad * detalle.Valor;
-                table1.AddCell(detalle.Cantidad.ToString());
-                table1.AddCell(detalle.FichaVehiculo);
-                table1.AddCell(detalle.Producto.NombreProducto);
-                if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            }
-            table1.AddCell("");
-            table1.AddCell("");
-            table1.AddCell(VM.Factura.Cotizacion.Nota);
-            table1.AddCell("");
-            table1.AddCell("");
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(4);
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.TotalFac.ToString("C0"));
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(4);
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.TotalItbis.ToString("C0"));
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(3);
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Total General RD: " + VM.TotalFacb.ToString("C0"));
-
-            doc.Add(table1);
-
-            Paragraph para = new Paragraph();
-            para.Add("______________________________ \nFirma Suplidor");
-            celda1.AddElement(para);
-            doc.Add(para);
-
-            doc.Close();
-            doc.Dispose();
             MailMessage mail = new MailMessage();
             foreach (var to in femail.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries))
             {

@@ -337,136 +337,13 @@ namespace FacturadorTaller.Controllers
             }
             string femail = cot.Email;
             string notaEmail = cot.Nota;
+            int id = cot.Cotizacion.CotizacionId;
             var VM = new CotizacionViewModel();
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
                             .FirstOrDefault(c => c.CotizacionId == cot.Cotizacion.CotizacionId);
-            VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == cot.Cotizacion.CotizacionId && c.Producto.Categoria == "Servicio")
-                .OrderByDescending(c => c.CotizacionId);
-            foreach (var v in VM.DetalleCot)
-            {
-                if (v.Comentario != null)
-                {
-                    VM.cont = 1;
-
-                }
-                else
-                {
-                    VM.cont = 0;
-                }
-            }
-            var totalFac = VM.Cotizacion.TotalFactura + VM.Cotizacion.Itbis;
+            PdfGen(id);
             var body = "<p>Cliente: {0} </p> </p><p>{1}</p><p> </p><p>Saludos, </p><p> </p><p> </p><p>Dora De Los Santos</p><p>Ejecutivo Ventas</p>";
-            var file = new FileInfo(Server.MapPath("/Content/Cotizacion.pdf"));
-            if (file.Exists)
-            {
-                file.Delete();
-            }
-            Document doc = new Document(PageSize.LETTER, 35, 35, 120, 35);
-            var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
-            var writer = PdfWriter.GetInstance(doc, output);
-            writer.PageEvent = new PageEventHelper();
-
-            doc.Open();
-
-           
-            PdfPTable table1 = new PdfPTable(3);
-            PdfPCell celda1 = new PdfPCell();
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Cotizacion: " + VM.Cotizacion.CotizacionId.ToString());
-
-            doc.Add(table1);
-
-            VM.Fecha = (VM.Cotizacion.Fecha).ToString("dd/MM/yyyy");
-            table1 = new PdfPTable(1);
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.AddCell("Fecha: "+ VM.Fecha);
-            table1.AddCell(VM.Cotizacion.Clientes.NombreCliente);
-            table1.AddCell("RNC "+VM.Cotizacion.Clientes.RncCliente);
-
-            doc.Add(table1);
-
-
-            table1 = new PdfPTable(5 + VM.cont);
-            table1.WidthPercentage = 100;
-            if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
-            else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
-            table1.HorizontalAlignment = 0;
-            table1.SpacingBefore = 20f;
-            table1.SpacingAfter = 30f;
-
-            table1.AddCell("Cantidad");
-            table1.AddCell("Ficha");
-            table1.AddCell("Tipo Trabajo");
-            if (VM.cont != 0)
-            { table1.AddCell("Detalle"); }
-            table1.AddCell("Valor RD$");
-            table1.AddCell("Total RD$");
-
-            foreach (var detalle in VM.DetalleCot)
-            {
-                decimal total = detalle.Cantidad * detalle.Valor;
-                table1.AddCell(detalle.Cantidad.ToString());
-                table1.AddCell(detalle.FichaVehiculo);
-                table1.AddCell(detalle.Producto.NombreProducto);
-                if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-            }
-            table1.AddCell("");
-            table1.AddCell("");
-            table1.AddCell(VM.Cotizacion.Nota);
-            table1.AddCell("");
-            table1.AddCell("");
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(4);
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.Cotizacion.TotalFactura.ToString("C"));
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(4);
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.Cotizacion.Itbis.ToString("C"));
-
-            doc.Add(table1);
-
-            table1 = new PdfPTable(3);
-            table1.WidthPercentage = 100;
-            table1.DefaultCell.Border = Rectangle.NO_BORDER;
-            table1.HorizontalAlignment = 0;
-
-            table1.AddCell(" ");
-            table1.AddCell("");
-            table1.AddCell("Total General RD: " + totalFac.ToString("C"));
-
-            doc.Add(table1);
-
-            doc.Close();
-            doc.Dispose();
-            output.Dispose();
-
+          
            MailMessage mail = new MailMessage();
            foreach(var to in femail.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)) {
                 mail.To.Add(new MailAddress(to));
@@ -491,7 +368,16 @@ namespace FacturadorTaller.Controllers
         }
 
         [Authorize(Roles = "Admin, Usuario")]
-        public FileStreamResult Pdf (int? id)
+        public FileStreamResult Pdf(int? id)
+        {
+            PdfGen(id);
+            FileStream fs = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Open, FileAccess.Read);
+            return File(fs, "application/pdf");
+
+        }
+
+      
+        public void PdfGen (int? id)
         {
             var VM = new CotizacionViewModel();
             VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
@@ -624,9 +510,7 @@ namespace FacturadorTaller.Controllers
             doc.Close();
             doc.Dispose();
 
-            FileStream fs = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Open, FileAccess.Read);
-
-            return File ( fs, "application/pdf");
+            
         }
 
         public class PageEventHelper : PdfPageEventHelper
