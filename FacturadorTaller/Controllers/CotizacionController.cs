@@ -362,27 +362,14 @@ namespace FacturadorTaller.Controllers
             {
                 file.Delete();
             }
-            Document doc = new Document(PageSize.LETTER);
+            Document doc = new Document(PageSize.LETTER, 35, 35, 120, 35);
             var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
+            writer.PageEvent = new PageEventHelper();
 
             doc.Open();
 
-            var logo = iTextSharp.text.Image.GetInstance(Server.MapPath("~/Content/Camion.jpg"));
-            logo.ScaleAbsoluteHeight(30);
-            logo.ScaleAbsoluteWidth(70);
-            doc.Add(logo);
-
-            Chunk chunk = new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 22, Font.BOLD, BaseColor.BLACK));
-            var parac = new Paragraph(chunk);
-            parac.Alignment = Element.ALIGN_CENTER;
-            Paragraph para = new Paragraph();
-            para.Add("REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL\nC/Felix Evariso Mejia, ·227," +
-                " Sector Villas Agricolas \nCel.: 829-350-3671  \nRNC: 131-33773-2");
-            para.Alignment = Element.ALIGN_CENTER;
-            doc.Add(parac);
-            doc.Add(para);
-
+           
             PdfPTable table1 = new PdfPTable(3);
             PdfPCell celda1 = new PdfPCell();
             table1.WidthPercentage = 100;
@@ -530,32 +517,21 @@ namespace FacturadorTaller.Controllers
             {
                 file.Delete();
             }
-            Document doc = new Document(PageSize.LETTER);
+           
+            Document doc = new Document(PageSize.LETTER,35,35,120,35);
             var output = new FileStream(Server.MapPath("/Content/Cotizacion.pdf"), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
+            writer.PageEvent = new PageEventHelper();          
 
             doc.Open();
-
-            var logo = iTextSharp.text.Image.GetInstance(Server.MapPath("~/Content/Camion.jpg"));
-            logo.ScaleAbsoluteHeight(30);
-            logo.ScaleAbsoluteWidth(70);
-            doc.Add(logo);
-
-            Chunk chunk = new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 22, Font.BOLD, BaseColor.BLACK));
-            var parac = new Paragraph(chunk);
-            parac.Alignment = Element.ALIGN_CENTER;
-            Paragraph para = new Paragraph();
-            para.Add("REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL\nC/Felix Evariso Mejia, ·227," +
-                " Sector Villas Agricolas \nCel.: 829-350-3671  \nRNC: 131-33773-2");
-            para.Alignment = Element.ALIGN_CENTER;
-            doc.Add(parac);
-            doc.Add(para);
 
             PdfPTable table1 = new PdfPTable(3);
             PdfPCell celda1 = new PdfPCell();
             table1.WidthPercentage = 100;
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
             table1.HorizontalAlignment = 0;
+            table1.SpacingBefore = 20f;
+            table1.SpacingAfter = 10f;
 
             table1.AddCell(" ");
             table1.AddCell("");
@@ -589,6 +565,7 @@ namespace FacturadorTaller.Controllers
             { table1.AddCell("Detalle"); }
             table1.AddCell("Valor RD$");
             table1.AddCell("Total RD$");
+            table1.HeaderRows = 1; 
 
             foreach (var detalle in VM.DetalleCot)
             {
@@ -652,9 +629,57 @@ namespace FacturadorTaller.Controllers
             return File ( fs, "application/pdf");
         }
 
+        public class PageEventHelper : PdfPageEventHelper
+        {
+            Font ffont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL);
+            protected PdfPTable table;
+            protected float tableHeight;
+
+            public PageEventHelper()
+            {
+                Phrase frase = new Phrase();
+                frase.Add(new Chunk("             EME SOLUCIONES EN GENERAL, S.R.L.", FontFactory.GetFont("Arial", 22, Font.BOLD, BaseColor.BLACK)));
+                table = new PdfPTable(1);
+                table.TotalWidth = 523f;
+                table.LockedWidth = true;
+                table.DefaultCell.Border = Rectangle.NO_BORDER;
+                table.AddCell(frase);
+                table.AddCell("                           REPARACION DE CAMA DE CAMIONES / SOLDADURA EN GENERAL");
+                table.AddCell("                                              C/Felix Evaristo Mejia, Sector Villas Agricolas ");
+                table.AddCell("                                                                  Cel.: 829-350-3671");
+                table.AddCell("                                                                  RNC: 131-33773-2");
+                tableHeight = table.TotalHeight;
+            }
+
+            public float getTableHeight()
+            {
+                return tableHeight;
+            }
+
+
+
+            //
+            public override void OnEndPage(PdfWriter writer, Document document)
+            {
+                var logo = iTextSharp.text.Image.GetInstance(System.Web.Hosting.HostingEnvironment.MapPath("~/Content/Camion.jpg"));
+                logo.SetAbsolutePosition(10, 725);
+                logo.ScaleAbsoluteHeight(30);
+                logo.ScaleAbsoluteWidth(70);
+
+                writer.DirectContent.AddImage(logo);
+
+                table.WriteSelectedRows(0, -1,
+                document.Left,
+                document.Top + ((document.TopMargin + tableHeight) / 2),
+                writer.DirectContent);
+            }
+
+        }
+
+
 
         // Delete Produto Cotizacion
-        [Authorize(Roles = "Admin")]
+                [Authorize(Roles = "Admin")]
         public ActionResult ProDelete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
