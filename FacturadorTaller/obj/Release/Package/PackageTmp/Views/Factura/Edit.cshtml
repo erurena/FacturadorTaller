@@ -23,7 +23,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.FechaFac)
-        @Html.TextBoxFor(model => model.FechaFac, new { @class = "form-control"})
+        @Html.TextBoxFor(model => model.FechaFac, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FechaFac, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
@@ -35,6 +35,16 @@
         @Html.LabelFor(model => model.Factura.OrdenCompraNu)
         @Html.TextBoxFor(model => model.Factura.OrdenCompraNu, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Factura.OrdenCompraNu, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Factura.Ncf)
+        @Html.TextBoxFor(model => model.Factura.Ncf, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Factura.Ncf, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Factura.FechaNcf)
+        @Html.TextBoxFor(model => model.Factura.FechaNcf, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Factura.FechaNcf, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

@@ -68,7 +68,8 @@
             @Html.ActionLink("Editar", "Edit", new { id = item.FacturaId }) |
             @Html.ActionLink("Imprimir", "Pdf", new { id = item.FacturaId, cotId = item.CotizacionId }) |
             @Html.ActionLink("Email", "Email", new { id = item.FacturaId, cotId = item.CotizacionId }) |
-            @Html.ActionLink("Pagar", "Pago", new { id = item.FacturaId })
+            @Html.ActionLink("Pagar", "Pago", new { id = item.FacturaId }) |
+            @Html.ActionLink("Anular", "AnulaFac", new { id = item.FacturaId })
         </td>
     </tr>
     }

@@ -388,6 +388,7 @@
     <Content Include="Views\Factura\Email.cshtml" />
     <Content Include="Views\Cotizacion\ConsolidadoFac.cshtml" />
     <Content Include="Views\Cotizacion\Consolidado.cshtml" />
+    <Content Include="Views\Factura\AnulaFac.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

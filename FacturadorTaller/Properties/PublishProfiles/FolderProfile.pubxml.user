@@ -28,10 +28,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/23/2018 13:18:12</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.dll">
-      <publishTime>05/17/2018 18:37:36</publishTime>
+      <publishTime>05/19/2018 11:59:51</publishTime>
     </File>
     <File Include="bin/FacturadorTaller.pdb">
-      <publishTime>05/17/2018 18:37:36</publishTime>
+      <publishTime>05/19/2018 11:59:51</publishTime>
     </File>
     <File Include="bin/HtmlSanitizationLibrary.dll">
       <publishTime>04/23/2018 13:18:13</publishTime>
@@ -163,7 +163,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/23/2018 13:18:07</publishTime>
     </File>
     <File Include="Content/Cotizacion.pdf">
-      <publishTime>05/17/2018 18:20:51</publishTime>
+      <publishTime>05/19/2018 11:58:03</publishTime>
     </File>
     <File Include="Content/PagedList.css">
       <publishTime>04/23/2018 13:18:07</publishTime>
@@ -504,14 +504,17 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Cotizacion/Sent.cshtml">
       <publishTime>04/23/2018 13:18:11</publishTime>
     </File>
+    <File Include="Views/Factura/AnulaFac.cshtml">
+      <publishTime>05/18/2018 21:46:15</publishTime>
+    </File>
     <File Include="Views/Factura/Edit.cshtml">
-      <publishTime>05/02/2018 21:34:02</publishTime>
+      <publishTime>05/18/2018 20:37:41</publishTime>
     </File>
     <File Include="Views/Factura/Email.cshtml">
       <publishTime>05/01/2018 14:45:38</publishTime>
     </File>
     <File Include="Views/Factura/Index.cshtml">
-      <publishTime>04/23/2018 13:18:11</publishTime>
+      <publishTime>05/18/2018 21:06:04</publishTime>
     </File>
     <File Include="Views/Factura/Pago.cshtml">
       <publishTime>04/23/2018 13:18:11</publishTime>
@@ -577,7 +580,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/23/2018 13:18:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/17/2018 17:58:12</publishTime>
+      <publishTime>05/19/2018 11:59:57</publishTime>
     </File>
   </ItemGroup>
 </Project>

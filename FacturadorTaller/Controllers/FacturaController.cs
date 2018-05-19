@@ -47,7 +47,7 @@ namespace FacturadorTaller.Controllers
 
             ViewBag.CurrentFilter = searchString;
             var factura = from s in DB.Factura.Include(f => f.Cotizacion.Clientes)
-                          .Where(f => f.PagoStatus !="S")
+                          .Where(f => f.PagoStatus !="S" && f.PagoStatus !="A")
                              select s;
             var ncf = DB.Ncf.Where(n => n.Estatus == null).SingleOrDefault();
             if (ncf !=null)
@@ -85,7 +85,7 @@ namespace FacturadorTaller.Controllers
         }
 
         // GET: Factura/Edit/5
-        [Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -103,7 +103,7 @@ namespace FacturadorTaller.Controllers
             return View(VM);
         }
 
-        [Authorize(Roles = "Admin, Usuario")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(CreafacturaViewModel mod)
@@ -120,11 +120,65 @@ namespace FacturadorTaller.Controllers
                     var ordenc = mod.Factura.OrdenCompraNu;
                     var fechafac = mod.GetDateF();
                     var fechaven = mod.GetDateFv();
+                    var ncf = mod.Factura.Ncf;
+                    var fechanc = mod.Factura.FechaNcf;
 
                     Factura file = DB.Factura.Find(facid);
                     file.OrdenCompraNu = ordenc;
                     file.FechaFac = fechafac;
                     file.FechaVen = fechaven;
+                    file.Ncf = ncf;
+                    file.FechaNcf = fechanc;
+                    DB.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (RetryLimitExceededException  /* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            return View(mod);
+        }
+
+        // GET: Factura/Anula/5
+        [Authorize(Roles = "Admin")]
+        public ActionResult AnulaFac(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var VM = new CreafacturaViewModel();
+            VM.Factura = DB.Factura.Find(id);
+            VM.FechaFac = (VM.Factura.FechaFac).ToString("dd/MM/yyyy");
+            VM.FechaVen = (VM.Factura.FechaVen).ToString("dd/MM/yyyy");
+            if (VM.Factura == null)
+            {
+                return HttpNotFound();
+            }
+            return View(VM);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AnulaFac(CreafacturaViewModel mod)
+        {
+            if (mod == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var facid = mod.Factura.FacturaId;
+                    var ordeNu = mod.Factura.OrdenCompraNu;
+
+                    Factura file = DB.Factura.Find(facid);
+                    file.PagoStatus = "A";
+                    file.OrdenCompraNu = ordeNu;
                     DB.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -369,8 +423,8 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
             };
             table1.AddCell("");
             table1.AddCell("");
@@ -388,8 +442,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.TotalFac.ToString("C0"));
-
+            table1.AddCell(new PdfPCell(new Phrase("Total RD: " + VM.TotalFac.ToString("C"))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = Rectangle.NO_BORDER });
             doc.Add(table1);
 
             table1 = new PdfPTable(4);
@@ -400,7 +453,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.TotalItbis.ToString("C0"));
+            table1.AddCell(new PdfPCell(new Phrase("18% Itbis: " + VM.TotalItbis.ToString("C"))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = Rectangle.NO_BORDER });
 
             doc.Add(table1);
 
@@ -411,7 +464,7 @@ namespace FacturadorTaller.Controllers
 
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total General RD: " + VM.TotalFacb.ToString("C0"));
+            table1.AddCell(new PdfPCell(new Phrase("Total General RD: " + VM.TotalFacb.ToString("C"))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = Rectangle.NO_BORDER });
 
             doc.Add(table1);
 

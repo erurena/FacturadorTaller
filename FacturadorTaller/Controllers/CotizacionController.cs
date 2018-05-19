@@ -460,8 +460,8 @@ namespace FacturadorTaller.Controllers
                 table1.AddCell(detalle.FichaVehiculo);
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont !=0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N0"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(total.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
             }
 
             table1.AddCell("");
@@ -480,7 +480,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total RD: " + VM.Cotizacion.TotalFactura.ToString("C0"));
+            table1.AddCell(new PdfPCell(new Phrase("Total RD: " + VM.Cotizacion.TotalFactura.ToString("C"))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = Rectangle.NO_BORDER });
 
             doc.Add(table1);
 
@@ -492,7 +492,7 @@ namespace FacturadorTaller.Controllers
             table1.AddCell(" ");
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("18% Itbis: " + VM.Cotizacion.Itbis.ToString("C0"));
+            table1.AddCell(new PdfPCell(new Phrase("18% Itbis: " + VM.Cotizacion.Itbis.ToString("C"))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = Rectangle.NO_BORDER });
 
             doc.Add(table1);
 
@@ -503,7 +503,7 @@ namespace FacturadorTaller.Controllers
 
             table1.AddCell(" ");
             table1.AddCell("");
-            table1.AddCell("Total General RD: " + totalFac.ToString("C0"));
+            table1.AddCell(new PdfPCell(new Phrase("Total General RD: " + totalFac.ToString("C"))) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = Rectangle.NO_BORDER });
 
             doc.Add(table1);
 
@@ -750,7 +750,7 @@ namespace FacturadorTaller.Controllers
                         filec.OrdenCompraNu = ordenCompra;
                         DB.Factura.Add(filec);
                         DB.SaveChanges();
-                        return RedirectToAction("Pdf", "Factura", new { id = filec.FacturaId, cotId = filec.CotizacionId });
+                        return RedirectToAction("Index");
                     }
                     cotm.FacturaEst = "S";
                     DB.SaveChanges();
@@ -765,7 +765,7 @@ namespace FacturadorTaller.Controllers
                     file.OrdenCompraNu = ordenCompra;
                     DB.Factura.Add(file);
                     DB.SaveChanges();
-                    return RedirectToAction("Pdf", "Factura", new {id = file.FacturaId, cotId = file.CotizacionId });
+                    return RedirectToAction("Index");
                 }
             }
             catch (RetryLimitExceededException  /* dex */)
