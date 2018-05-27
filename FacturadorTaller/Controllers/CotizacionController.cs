@@ -217,11 +217,26 @@ namespace FacturadorTaller.Controllers
                 if (ModelState.IsValid)
                 {
                     var cotId = cot.Cotizacion.CotizacionId;
+                    var clienteId = cot.Cotizacion.ClienteId;
                     var prodId = productoId;
                     var cant = cot.Cantidad;
                     var ficVeh = cot.FichaVehiculo;
                     var valor = cot.Valor;
                     var comen = cot.Comentario;
+                    DateTime fechaActual = DateTime.Now.AddMonths(-3);
+
+                    var fichExi = DB.DetalleCot.Include(c => c.Cotizacion)
+                        .Where(c => c.Cotizacion.ClienteId == clienteId && c.ProductoId == prodId && c.FichaVehiculo == ficVeh 
+                        && c.Cotizacion.Fecha >= fechaActual && c.Cotizacion.FacturaEst == "S");
+
+
+                    if (fichExi.Any())
+                    {
+                        //ViewBag.Ficha = "Esta ficha ya tiene un factura con ese producto";
+                        TempData["Ficha"] = "**Aviso Error*** Este cliente tiene ese producto con esta ficha de vehiculo facturado en otra Cotizacion en menos de 3 meses";
+                        return RedirectToAction("ProductoFac", new { cotId });
+                    }
+
 
                     DetalleCot file = new DetalleCot();
 
