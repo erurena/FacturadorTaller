@@ -377,13 +377,13 @@ namespace FacturadorTaller.Controllers
             Phrase phrase = new Phrase();
             phrase.Add(new Chunk("EME SOLUCIONES EN GENERAL, S.R.L.", new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD)));
             table1.AddCell(phrase);
-            table1.AddCell("NCF: " + VM.Factura.Ncf);
+            table1.AddCell("Factura Válida ");
             table1.AddCell("RNC: 131 - 33773 - 2");
-            table1.AddCell("Válida Hasta: " + VM.Factura.FechaNcf);
+            table1.AddCell("Para crédito fiscal");
             table1.AddCell("Fecha : " + fecha);
-            table1.AddCell("");
+            table1.AddCell("NCF: " + VM.Factura.Ncf);
             table1.AddCell("Factura: " + VM.Factura.FacturaId.ToString());
-            table1.AddCell("");
+            table1.AddCell("Válida Hasta: " + VM.Factura.FechaNcf);
 
             doc.Add(table1);
 
@@ -391,39 +391,43 @@ namespace FacturadorTaller.Controllers
             table1 = new PdfPTable(1);
             table1.DefaultCell.Border = Rectangle.NO_BORDER;
             table1.WidthPercentage = 100;
-            table1.AddCell("Cliente: "+VM.Factura.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("RNC: " + VM.Factura.Cotizacion.Clientes.RncCliente);
+            table1.AddCell("Cliente: "+VM.Factura.Cotizacion.Clientes.NombreCliente);
             table1.AddCell("Orden de Compra: " + VM.Factura.OrdenCompraNu);
 
 
             doc.Add(table1);
 
-            table1 = new PdfPTable(5 + VM.cont);
+            table1 = new PdfPTable(6 + VM.cont);
             table1.WidthPercentage = 100;
             if (VM.cont != 0)
-            { table1.SetWidths(new int[] { 1, 1, 2, 2, 1, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 1, 2, 2, 1, 1 }); }
             else
-            { table1.SetWidths(new int[] { 1, 1, 2, 1, 1 }); }
+            { table1.SetWidths(new int[] { 1, 1, 1, 2, 1, 1 }); }
             table1.HorizontalAlignment = 0;
             table1.SpacingBefore = 20f;
             table1.SpacingAfter = 30f;
 
-            table1.AddCell("Cantidad");
             table1.AddCell("Ficha");
+            table1.AddCell("Cantidad");
+            table1.AddCell("Valor RD$");
             table1.AddCell("Tipo Trabajo");
             if (VM.cont != 0)
             { table1.AddCell("Detalle"); }
-            table1.AddCell("Valor RD$");
+            table1.AddCell("Itbis");
             table1.AddCell("Total RD$");
 
             foreach (var detalle in VM.DetalleCot)
             {
                 decimal total = detalle.Cantidad * detalle.Valor;
-                table1.AddCell(detalle.Cantidad.ToString());
+                decimal itbisVal = 0;
+                if (VM.TotalItbis != 0) { itbisVal = detalle.Valor * 0.18m; }
                 table1.AddCell(detalle.FichaVehiculo);
+                table1.AddCell(detalle.Cantidad.ToString());
+                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 table1.AddCell(detalle.Producto.NombreProducto);
                 if (VM.cont != 0) { table1.AddCell(detalle.Comentario); }
-                table1.AddCell(new PdfPCell(new Phrase(detalle.Valor.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                table1.AddCell(new PdfPCell(new Phrase(itbisVal.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
                 table1.AddCell(new PdfPCell(new Phrase(total.ToString("N"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
             };
             table1.AddCell("");

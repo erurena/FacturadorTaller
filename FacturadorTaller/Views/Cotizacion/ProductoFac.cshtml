@@ -60,9 +60,10 @@
 
     if (TempData["Ficha"] != null)
     {
-        <div>
-            <button type="button" class="btn-lg">@TempData["Ficha"]</button>
-        </div>
+    <div>
+        <h4>@ViewBag.fac</h4>
+        <button type="button" class="btn-lg">@TempData["Ficha"]</button>
+    </div>
     }
 
     <div id="producto-label">
@@ -174,8 +175,8 @@
 <br />
 <div>
     @Html.ActionLink("Volver a lista", "Index") |
-    @Html.ActionLink("Email", "Email", new { id = Model.Cotizacion.CotizacionId })
-
+    @Html.ActionLink("Email", "Email", new { id = Model.Cotizacion.CotizacionId }) |
+    @Html.ActionLink("Liberar Itbis", "ItbisDel", new { id = Model.Cotizacion.CotizacionId })
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
