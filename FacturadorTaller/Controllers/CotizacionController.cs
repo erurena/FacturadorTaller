@@ -227,14 +227,16 @@ namespace FacturadorTaller.Controllers
 
                     var fichExi = DB.DetalleCot.Include(c => c.Cotizacion)
                         .Where(c => c.Cotizacion.ClienteId == clienteId && c.ProductoId == prodId && c.FichaVehiculo == ficVeh 
-                        && c.Cotizacion.Fecha >= fechaActual && c.Cotizacion.FacturaEst == "S");
+                        && c.Cotizacion.Fecha >= fechaActual && c.Cotizacion.FacturaEst == "S" );
+      
+                    var fac = fichExi.First();
+                    var fac1 = fac.Cotizacion.Factura.First();
+                    var pagSt = fac1.PagoStatus;
 
 
-                    if (fichExi.Any())
+                    if (fichExi.Any() && pagSt !="A")
                     {
-                        var fic = fichExi.First();
-                        ViewBag.fac = fic.Cotizacion.Factura.First();
-                        TempData["Ficha"] ="**Aviso Error*** Este cliente tiene ese producto con esta ficha de vehiculo facturado en otra Cotizacion en menos de 3 meses";
+                        TempData["Ficha"] ="**Aviso Error*** Este cliente tiene ese producto con esta ficha de vehiculo facturado en menos de 3 meses,  en Factura: "+fac1.FacturaId;
                         return RedirectToAction("ProductoFac", new { cotId });
                     }
 
@@ -322,7 +324,7 @@ namespace FacturadorTaller.Controllers
             return RedirectToAction("Index");
         }
 
-        // Email Cotizacion
+        // Eliminar Itbis Cotizacion
         [Authorize(Roles = "Admin")]
         public ActionResult ItbisDel(int? id)
         {
@@ -330,46 +332,24 @@ namespace FacturadorTaller.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var VM = new CotizacionViewModel();
-            VM.Cotizacion = DB.Cotizacion.Include(c => c.Clientes)
-                            .FirstOrDefault(c => c.CotizacionId == id);
-            VM.DetalleCot = DB.DetalleCot.Include(d => d.Producto)
-                .Where(c => c.CotizacionId == id)
-                .OrderByDescending(c => c.CotizacionId);
-            if (VM.Cotizacion == null)
-            {
-                return HttpNotFound();
-            }
-            return View(VM);
+            var VM = new Cotizacion();
+            ItbisDelEje(id);
+            return RedirectToAction("ProductoFac", new { cotId = id });
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost, ActionName("ItbisDel")]
-        [ValidateAntiForgeryToken]
-        public ActionResult ItbisDelPost(int? id)
+        public void ItbisDelEje(int? id)
         {
-            if (id == null)
+
+
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                Cotizacion file = DB.Cotizacion.Find(id);
+                file.Itbis = 0;
+                DB.SaveChanges();
             }
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    
-                    Cotizacion file = DB.Cotizacion.Find(id);
-                    file.Itbis = 0;
-                    DB.SaveChanges();
-                    return RedirectToAction("ProductoFac", new { cotId = file.CotizacionId });
-                }
-            }
-            catch (RetryLimitExceededException  /* dex */)
-            {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-            return View();
         }
+        
 
         // Email Cotizacion
         [Authorize(Roles = "Admin, Usuario")]

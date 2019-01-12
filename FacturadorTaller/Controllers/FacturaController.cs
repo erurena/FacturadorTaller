@@ -191,6 +191,32 @@ namespace FacturadorTaller.Controllers
             return View(mod);
         }
 
+        // Eliminar Itbis Cotizacion
+        [Authorize(Roles = "Admin")]
+        public ActionResult ItbisDel(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var VM = new Cotizacion();
+            ItbisDelEje(id);
+            return RedirectToAction("Index");
+        }
+
+        public void ItbisDelEje(int? id)
+        {
+
+
+            if (ModelState.IsValid)
+            {
+
+                Cotizacion file = DB.Cotizacion.Find(id);
+                file.Itbis = 0;
+                DB.SaveChanges();
+            }
+        }
+
         // GET: Pagos
         [Authorize(Roles = "Admin, Usuario")]
         public ActionResult Pago(int? id)
